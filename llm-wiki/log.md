@@ -28,4 +28,8 @@ Verified `google/gemini-2.5-flash` with a live OpenRouter completion on 2026-11-
 
 ## [2026-11-14] verify | tests, build, Supabase, Ask Mon
 
-`pnpm typecheck`, `pnpm lint`, 41 unit tests, `pnpm build`, 8 E2E tests, 8 accessibility scans, and 4 visual regression tests pass. The Supabase migration applied to project `ebtmlzewcesrensozyxm` and the seed loaded 12 deals. Ask Mon returned three cinema recommendations through the live OpenRouter route. A live PostHog event, Vercel deployment, video, and Canvas submission remain unverified.
+`pnpm typecheck`, `pnpm lint`, 41 unit tests, `pnpm build`, 8 E2E tests, 8 accessibility scans, and 4 visual regression tests pass. The Supabase migration applied to project `ebtmlzewcsrensozyxm` and the seed loaded 12 deals. Ask Mon returned three cinema recommendations through the live OpenRouter route. A live PostHog event, Vercel deployment, video, and Canvas submission remain unverified.
+
+## [2026-11-14] deploy | Vercel production and live analytics
+
+Deployed to https://fuv-f26-productdev-apero-submission.vercel.app. The production build uses the server-rendered Supabase home and detail paths. Ask Mon returned three recommendations through the production API. A consented `landing_viewed` event was observed in PostHog project `735307`. The video and Canvas submission remain unverified.

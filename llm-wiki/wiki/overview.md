@@ -28,8 +28,10 @@ The course brief, the PRD, the original team notes, and the generated design ass
 - The hosted Supabase migration was applied and the seed loaded 12 deals. Server-rendered home and detail pages use Supabase mode. Client pages still read the fixture catalog directly.
 - Docker is unavailable on this machine, so the standard local Supabase stack cannot run. Hosted Supabase is the working path.
 - Vercel and Supabase CLI authentication were verified. The projects named `FUV-F26-ProductDev-Apero-Submission-Group6` exist.
-- Ask Mon returned three cinema recommendations through the live OpenRouter route. A live PostHog event is not yet observed.
-- No commit, deployment, video, or Canvas submission has been produced.
+- Ask Mon returned three cinema recommendations through the live OpenRouter route.
+- A consented `landing_viewed` event was observed in PostHog project `735307`.
+- Production is deployed at https://fuv-f26-productdev-apero-submission.vercel.app.
+- No video or Canvas submission has been produced.
 
 ## Open questions
 

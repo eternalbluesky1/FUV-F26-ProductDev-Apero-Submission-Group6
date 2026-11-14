@@ -39,5 +39,5 @@ StuDeal measures whether students can find, understand, and keep offers. Analyti
 ## Verification
 
 - Local consent UI: implemented.
-- Live PostHog event in project `735307`: NOT OBSERVED.
+- Live PostHog event in project `735307`: OBSERVED on 2026-11-14. A consented `landing_viewed` event reached the project after clicking Allow on the production URL.
 - Mocked SDK behavior is not live evidence.

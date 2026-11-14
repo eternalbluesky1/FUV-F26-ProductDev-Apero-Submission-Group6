@@ -23,14 +23,14 @@ Deployment: not deployed
 | Ask Mon deterministic fallback | PASS | `pnpm test:e2e` matching test |
 | Outbound route | PASS | 400 invalid surface, 303 valid redirect |
 | PostHog consent adapter | PASS | `components/consent-banner.tsx`, `lib/analytics.ts` |
-| Live PostHog event | NOT OBSERVED | project `735307` has no app event yet |
+| Live PostHog event | PASS | consented `landing_viewed` observed in project `735307` |
 | Unit tests | PASS | 41 tests |
 | E2E tests | PASS | 8 tests, mobile and desktop |
 | Accessibility scans | PASS | 8 scans, no serious or critical violations |
 | Visual regression | PASS | 4 baselines, reviewed |
 | Production build | PASS | `pnpm build`, 13 routes |
 | README and tracking plan | PASS | `README.md`, `TRACKING-PLAN.md` |
-| Hosted deployment | NOT RUN | no app deploy yet |
+| Hosted deployment | PASS | https://fuv-f26-productdev-apero-submission.vercel.app |
 | Demo video | NOT RUN | no recording |
 | Canvas submission | NOT RUN | not prepared |
 
@@ -58,8 +58,8 @@ Deployment: not deployed
 | `pnpm test:visual` | PASS, 4 tests |
 | Hosted Supabase migration | PASS |
 | Hosted seed | PASS, 12 deals, 0 clicks |
-| Live PostHog event | NOT RUN |
-| Vercel deployment | NOT RUN |
+| Live PostHog event | PASS, consented `landing_viewed` |
+| Vercel deployment | PASS, production URL |
 
 ## Blockers
 
@@ -70,4 +70,4 @@ Deployment: not deployed
 
 ## Next action
 
-Commit the verified app, deploy a preview to Vercel, verify one consented PostHog event, then prepare the README/video/submission handoff. Do not claim a live event or submission without evidence.
+Record the 2-3 minute demo video, add its link to the README, verify reviewer access to the repository and Vercel URL, then prepare the Canvas submission. Do not claim a video or submission without evidence.

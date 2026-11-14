@@ -29,6 +29,8 @@ The proposed launch channel is the public web link shared through willing univer
 
 ## Access and setup
 
+Live URL: https://fuv-f26-productdev-apero-submission.vercel.app
+
 App root: `StuDeal Project/`
 
 Prerequisites: Node 24, pnpm 10, and a browser.
@@ -84,13 +86,22 @@ pnpm test:visual
 
 Current evidence is recorded in [`StuDeal Project/docs/IMPLEMENTATION-STATUS.md`](StuDeal%20Project/docs/IMPLEMENTATION-STATUS.md). A command is not marked PASS until it has been run.
 
+Verified evidence:
+
+- `pnpm typecheck`, `pnpm lint`, `pnpm test:unit` (41 tests), `pnpm build`, `pnpm test:e2e` (8 tests), `pnpm test:a11y` (8 scans), and `pnpm test:visual` (4 baselines) pass.
+- The hosted Supabase migration applied and the seed loaded 12 rows.
+- The production deployment is live at the URL above.
+- Ask Mon returned three cinema recommendations through the live OpenRouter route.
+- A consented `landing_viewed` event was observed in PostHog project `735307`.
+
 Known limitations:
 
 - Local Supabase is blocked because Docker is unavailable.
-- Hosted Supabase migration, deployment, live PostHog events, video, and Canvas submission are not yet verified.
+- Client pages still read the fixture catalog directly; the server-rendered home and detail paths use Supabase mode.
 - The offer snapshot is dated. Each offer must be rechecked before a public release.
 - The brand marks in the generated concepts are not approved artwork. The UI uses text brand names.
 - Team member names and contributions are TBD.
+- The demo video and Canvas submission are not yet produced.
 
 ## Team and contributions
 

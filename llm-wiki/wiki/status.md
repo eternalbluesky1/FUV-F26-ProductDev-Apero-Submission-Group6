@@ -33,10 +33,10 @@ The project is time-boxed. A later session must be able to resume without guessi
 | Visual regression | PASS | `pnpm test:visual`, 4 reviewed baselines |
 | Supabase migration and seed | PASS | migration applied; seed count 12 |
 | Supabase client mode | INCOMPLETE | server pages use Supabase mode; client pages still fixture |
-| Ask Mon live provider | PASS | 3 cinema recommendations returned through the live route |
-| PostHog consent and events | IMPLEMENTED, NOT OBSERVED | no live event in project `735307` |
+| Ask Mon live provider | PASS | 3 cinema recommendations returned through the live production route |
+| PostHog consent and events | PASS | consented `landing_viewed` observed in project `735307` |
 | Build | PASS | `pnpm build`, 13 routes |
-| Deployment | NOT RUN | no app deploy |
+| Deployment | PASS | https://fuv-f26-productdev-apero-submission.vercel.app |
 | Demo video | NOT RUN | no recording |
 | Canvas submission | NOT RUN | not prepared |
 
