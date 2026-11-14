@@ -13,3 +13,4 @@ blob-report/
 .DS_Store
 StuDeal-Product-Requirements-Document.pdf
 Original Docs/
+*.tsbuildinfo

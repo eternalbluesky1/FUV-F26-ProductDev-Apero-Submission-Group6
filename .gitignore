@@ -13,3 +13,4 @@ blob-report/
 .DS_Store
 Original Docs/
 StuDeal Project/StuDeal-Product-Requirements-Document.pdf
+*.tsbuildinfo
