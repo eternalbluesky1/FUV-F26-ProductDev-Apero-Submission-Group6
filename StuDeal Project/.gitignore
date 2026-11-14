@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+.env
+.env.local
+.env.*.local
+*.log
+test-results/
+playwright-report/
+blob-report/
+.DS_Store
+StuDeal-Product-Requirements-Document.pdf
+Original Docs/

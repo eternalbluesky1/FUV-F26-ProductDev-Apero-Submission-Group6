@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-purple: #5b3df5;
+  --color-brand-purple-hover: #4b2edb;
+  --color-brand-purple-pressed: #3c23b5;
+  --color-brand-yellow: #ffd23f;
+  --color-brand-pink: #ff6fa8;
+  --color-brand-mint: #22c79a;
+  --color-ink: #101828;
+  --color-muted: #667085;
+  --color-surface: #f7f7fb;
+  --color-surface-raised: #ffffff;
+  --color-surface-lilac: #f0ecff;
+  --color-border: #dde1ea;
+  --color-success: #15966b;
+  --color-success-surface: #e6faf4;
+  --color-warning: #b54708;
+  --color-warning-surface: #fff7d2;
+  --color-danger: #b42318;
+  --color-danger-surface: #fef3f2;
+  --color-focus: #5b3df5;
+  --font-display: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  --font-sans: "Segoe UI", Arial, sans-serif;
+  --radius-card: 16px;
+  --radius-panel: 24px;
+  --shadow-card: 0 2px 10px rgba(34, 27, 74, 0.08);
+  --shadow-raised: 0 8px 24px rgba(34, 27, 74, 0.12);
+}
+
+:root {
+  color-scheme: light;
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(91, 61, 245, 0.08), transparent 28rem),
+      radial-gradient(circle at 88% 12%, rgba(255, 210, 63, 0.13), transparent 22rem),
+      var(--color-surface);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    outline-offset: 3px;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: rgba(91, 61, 245, 0.18);
+  }
+}
+
+.page-wrap {
+  width: min(100% - 2rem, 80rem);
+  margin-inline: auto;
+}
+
+.card-surface {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.prose-mon p {
+  margin: 0 0 0.75rem;
+}
+
+.prose-mon ul {
+  margin: 0 0 0.75rem 1.25rem;
+  padding: 0;
+  list-style: disc;
+}
+
+.prose-mon a {
+  color: var(--color-brand-purple);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

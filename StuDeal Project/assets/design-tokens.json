@@ -1,0 +1,160 @@
+{
+  "brand": {
+    "name": "studeal",
+    "mascot": "Mon",
+    "tagline": "Deal hay, đúng lúc.",
+    "color": {
+      "purple": "#5B3DF5",
+      "purpleHover": "#4B2EDB",
+      "purplePressed": "#3C23B5",
+      "yellow": "#FFD23F",
+      "pink": "#FF6FA8",
+      "mint": "#22C79A"
+    }
+  },
+  "color": {
+    "ink": "#101828",
+    "muted": "#667085",
+    "surface": "#F7F7FB",
+    "surfaceRaised": "#FFFFFF",
+    "surfaceLilac": "#F0ECFF",
+    "border": "#DDE1EA",
+    "success": "#15966B",
+    "successSurface": "#E6FAF4",
+    "warning": "#B54708",
+    "warningSurface": "#FFF7D2",
+    "danger": "#B42318",
+    "dangerSurface": "#FEF3F2",
+    "focus": "#5B3DF5"
+  },
+  "font": {
+    "display": "Baloo 2",
+    "body": "Be Vietnam Pro",
+    "fallback": "Arial, sans-serif",
+    "weights": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "scale": {
+      "display": {
+        "size": 48,
+        "lineHeight": 56,
+        "weight": 700
+      },
+      "h1": {
+        "size": 36,
+        "lineHeight": 44,
+        "weight": 700
+      },
+      "h2": {
+        "size": 28,
+        "lineHeight": 36,
+        "weight": 700
+      },
+      "h3": {
+        "size": 22,
+        "lineHeight": 30,
+        "weight": 600
+      },
+      "bodyLarge": {
+        "size": 18,
+        "lineHeight": 28,
+        "weight": 400
+      },
+      "body": {
+        "size": 16,
+        "lineHeight": 24,
+        "weight": 400
+      },
+      "small": {
+        "size": 14,
+        "lineHeight": 20,
+        "weight": 400
+      },
+      "caption": {
+        "size": 12,
+        "lineHeight": 16,
+        "weight": 500
+      }
+    }
+  },
+  "space": {
+    "unit": 4,
+    "values": {
+      "1": 4,
+      "2": 8,
+      "3": 12,
+      "4": 16,
+      "5": 20,
+      "6": 24,
+      "8": 32,
+      "10": 40,
+      "12": 48,
+      "16": 64,
+      "20": 80
+    }
+  },
+  "radius": {
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "pill": 999
+  },
+  "shadow": {
+    "card": "0 2px 10px rgba(34, 27, 74, 0.08)",
+    "raised": "0 8px 24px rgba(34, 27, 74, 0.12)",
+    "focus": "0 0 0 3px rgba(91, 61, 245, 0.25)"
+  },
+  "layout": {
+    "breakpoints": {
+      "mobileMax": 767,
+      "tabletMin": 768,
+      "tabletMax": 1023,
+      "desktopMin": 1024,
+      "wideMin": 1440
+    },
+    "desktop": {
+      "contentMax": 1280,
+      "sidebar": 232,
+      "header": 72,
+      "gutter": 32,
+      "gridColumns": 12,
+      "gridGap": 24
+    },
+    "tablet": {
+      "contentGutter": 24,
+      "gridColumns": 8,
+      "gridGap": 20
+    },
+    "mobile": {
+      "header": 56,
+      "contentGutter": 16,
+      "gridColumns": 4,
+      "gridGap": 16
+    }
+  },
+  "control": {
+    "buttonHeight": {
+      "sm": 36,
+      "md": 44,
+      "lg": 48
+    },
+    "inputHeight": 48,
+    "iconSize": {
+      "sm": 16,
+      "md": 20,
+      "lg": 24
+    },
+    "minTapTarget": 44
+  },
+  "motion": {
+    "fastMs": 150,
+    "standardMs": 220,
+    "entranceMs": 300,
+    "easing": "cubic-bezier(0.2, 0, 0, 1)",
+    "reducedMotion": "disable nonessential transforms and autoplay"
+  }
+}
