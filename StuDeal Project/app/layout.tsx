@@ -3,6 +3,7 @@ import Link from "next/link";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AnalyticsInit } from "@/components/analytics-init";
+import { FixtureNotice } from "@/components/fixture-notice";
 import { MobileTabBar } from "@/components/mobile-tab-bar";
 import { SiteHeader } from "@/components/site-header";
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="vi" className={`${baloo2.variable} ${beVietnamPro.variable}`}>
       <body>
+        <FixtureNotice />
         <SiteHeader />
         <main className="pb-24 sm:pb-12 md:pb-12">{children}</main>
         <footer className="mt-16 border-t border-border bg-white">

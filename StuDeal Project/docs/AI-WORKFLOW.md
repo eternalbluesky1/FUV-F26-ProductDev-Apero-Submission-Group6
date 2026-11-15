@@ -15,7 +15,7 @@ Phần lớn công việc build được ghi nhận trong ngày 14 tháng 11 nă
 | OpenCode coding agent | Đọc repo, lập kế hoạch, viết và sửa code, refactor, chạy kiểm tra | `package.json`, `docs/IMPLEMENTATION-STATUS.md`, `git log --oneline` |
 | Subagent chạy nền | Sáu workstream giao diện độc lập | Kết quả nằm trong `app/`, `components/`, `public/brand/`; repo không lưu transcript đầy đủ của từng phiên |
 | Agent nghiên cứu web (Exa) | Tìm trang ưu đãi chính thức đang hiện hành | `assets/verified-offer-snapshot.csv`, danh sách nguồn ở PRD trang 41, `docs/ASSET-SOURCES.md` |
-| Script đo model | Đo tool-calling, độ trễ và chất lượng gợi ý của các model OpenRouter | `tests/unit/model-probe.test.ts`, `lib/ask-mon-models.ts` |
+| Script đo model | Đo tool-calling, độ trễ và chất lượng gợi ý của các model OpenRouter | Script đã chạy một lần rồi xoá khỏi repo để CI không gọi provider thật; allowlist ở `lib/ask-mon-models.ts` |
 | Vitest, Playwright, axe | Kiểm thử đơn vị, hành trình, accessibility, visual regression | `vitest.config.ts`, `playwright.config.ts`, `tests/` |
 
 ### 2.1 OpenCode coding agent
@@ -36,7 +36,9 @@ Agent dùng Exa để tìm kiếm và mở trang, nhằm xác định trang ưu 
 
 ### 2.4 Script đo model
 
-`tests/unit/model-probe.test.ts` chạy cùng hai câu hỏi tiếng Việt trên sáu model, hai lần mỗi câu, và in ra `mode`, thời gian, số gợi ý, thương hiệu, và phần đầu câu trả lời. Danh sách thử gồm năm model miễn phí và `google/gemini-2.5-flash`. Script có timeout 600 giây và gọi provider thật, nên không nằm trong CI.
+Script probe chạy cùng hai câu hỏi tiếng Việt trên nhiều model, hai lần mỗi câu, và in ra `mode`, thời gian, số gợi ý, thương hiệu, và phần đầu câu trả lời. Danh sách thử gồm các model miễn phí và `google/gemini-2.5-flash` để so sánh. Script có timeout 600 giây và gọi provider thật, nên không nằm trong CI; file test đã được xoá khỏi repo sau khi đo.
+
+Kết luận từ lần đo: một model miễn phí từng trả về một ưu đãi không có trong catalog ở lần gọi thô, nên route live chỉ nhận model trong allowlist và luôn lọc gợi ý theo catalog trước khi trả về. Model mặc định hiện tại là `baidu/ernie-5.5-flash-preview:free`; `Ling 3.2 Flash` và `Nemotron 3.5 Super VL` là lựa chọn thay thế. Không nên đọc mục này như một bảng xếp hạng model.
 
 Mục đích không phải chọn model mạnh nhất trên giấy, mà kiểm tra model nào thực sự gọi được công cụ `search_deals` và trả về ID có trong catalog.
 
@@ -89,14 +91,14 @@ Lý do: nếu chỉ dùng viewport mặc định của Playwright, baseline mobi
 | Vấn đề | Hệ quả | Cách xử lý |
 |---|---|---|
 | Docker không có | Không chạy được Supabase local và pgTAP | Dùng Supabase hosted làm đường chính; ghi BLOCKED cho local stack |
-| Một model miễn phí trả lời câu hỏi phim bằng một ưu đãi không có trong catalog | Không thể tin tool-calling của model miễn phí | Đo bằng script probe thay vì giả định; chọn `google/gemini-2.5-flash` cho route live |
+| Một model miễn phí trả lời câu hỏi phim bằng một ưu đãi không có trong catalog | Không thể tin tool-calling của model miễn phí | Đo bằng script probe thay vì giả định; giới hạn model bằng allowlist và chọn `baidu/ernie-5.5-flash-preview:free` cho route live |
 | Clearbit Logo API không truy cập được | Không lấy logo qua Clearbit | Dùng Wikimedia Commons và Simple Icons |
 | Trang CGV và Highlands không truy cập được từ mạng build | Không lấy logo từ site thương hiệu | Dùng Wikimedia Commons, ghi rõ nguồn và giấy phép |
 | Pillow không cài | Không tạo được `.ico` | Dùng `app/icon.png` và `app/apple-icon.png` của App Router |
 | Asset archive thiếu `studeal-theme.css` và `SEED-IMPORT.md` | Không có theme/seed import có sẵn | Dựng CSS từ `assets/design-tokens.json`; seed từ CSV và dữ liệu đã kiểm tra |
 | Trang cuối PRD chứa thông tin riêng tư | Không thể đưa vào bản trích xuất hay commit | Bỏ toàn bộ trang cuối khỏi mọi lần đọc PRD; không chép vào wiki, README hay tài liệu |
 
-Về model miễn phí: kết quả probe không được lưu thành file log trong repo. Bằng chứng còn lại là script, danh sách model, và việc route live dùng Gemini. Không nên đọc mục này như một đánh giá xếp hạng model.
+Về model miễn phí: kết quả probe không được lưu thành file log trong repo. Bằng chứng còn lại là allowlist model, kết quả route live trong `docs/IMPLEMENTATION-STATUS.md`, và quy tắc lọc gợi ý theo catalog trong `lib/ask-mon.ts`.
 
 ## 5. Cách tái lập và những gì người đánh giá có thể kiểm tra
 
@@ -125,16 +127,11 @@ pnpm test:a11y
 pnpm test:visual
 ```
 
-Trạng thái ghi ngày 2026-11-14: lint, typecheck, 46 unit test, build 15 route, 8 E2E, 8 lượt quét accessibility, và 4 baseline visual đều PASS. Tài liệu này không chạy lại các lệnh đó.
+Trạng thái ghi ngày 2026-11-15: lint, typecheck, 65 unit test, build 16 route, 24 E2E, 16 lượt quét accessibility, và 8 baseline visual đều PASS. Tài liệu này không chạy lại các lệnh đó.
 
-### 5.3 Chạy lại probe model
+### 5.3 Probe model
 
-```bash
-cd "StuDeal Project"
-pnpm vitest run tests/unit/model-probe.test.ts
-```
-
-Lệnh này gọi OpenRouter thật, cần `OPENROUTER_API_KEY` trong `.env.local`, và có thể tiêu quota. Không chạy trong CI.
+Script probe đã chạy một lần trên máy local với `OPENROUTER_API_KEY` trong `.env.local` và đã bị xoá khỏi repo để CI không gọi provider thật. Không có lệnh tái lập nào được giữ lại; bằng chứng là allowlist, kết quả route live và lịch sử quyết định ở mục 4.
 
 ### 5.4 Bản đồ bằng chứng
 
@@ -143,7 +140,7 @@ Lệnh này gọi OpenRouter thật, cần `OPENROUTER_API_KEY` trong `.env.loca
 | Mốc nào đã xong, mốc nào bị chặn | `docs/IMPLEMENTATION-STATUS.md` |
 | Sự kiện analytics nào có thật | `TRACKING-PLAN.md` |
 | Logo lấy từ đâu, giấy phép gì | `docs/ASSET-SOURCES.md` |
-| Cách đo model | `tests/unit/model-probe.test.ts` |
+| Cách chọn model | `lib/ask-mon-models.ts`, mục 4 của tài liệu này |
 | Viewport và dev indicator | `playwright.config.ts`, `tests/visual/core.spec.ts`, `next.config.ts` |
 | Catalog và schema | `lib/catalog-data.ts`, `supabase/migrations/`, `supabase/seeds/seed.sql` |
 | Lịch sử thay đổi | `git log --oneline` |
@@ -157,5 +154,5 @@ Người đánh giá có thể kiểm tra code, test, cấu hình, catalog và l
 - Không có nghiên cứu người dùng hoàn chỉnh, không có phỏng vấn sinh viên, không có số liệu người dùng thật.
 - Không có bằng chứng đã qua vòng gating của Apero.
 - Không có video demo và không có biên nhận nộp Canvas.
-- Không có tên hay phân công thành viên, vì dữ liệu đó chưa được cung cấp.
+- Tên và phân công thành viên nằm trong `README.md`; tài liệu này không đánh giá mức đóng góp của từng người.
 - Không có quan hệ đối tác, hoa hồng, hay giao dịch mua trong bất kỳ phần nào ở trên.

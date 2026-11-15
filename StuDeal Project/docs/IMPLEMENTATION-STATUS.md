@@ -34,6 +34,8 @@ Deployment: https://fuv-f26-productdev-apero-submission.vercel.app
 | Production build | PASS | `pnpm build`, 16 routes |
 | UI redesign pass | PASS | home, header, local fonts, glass offer cards, brand logos, prominent categories, mobile swipe deck |
 | Visual audit fixes | PASS | humanized source/status labels; Ask Mon chat first on mobile |
+| Fixture data notice | PASS | `components/fixture-notice.tsx` shows a Vietnamese demo-data label in fixture mode and after a hosted-read fallback |
+| Public rubric tracker | PASS | `docs/RUBRIC-TRACKER.md` maps the assignment brief criteria to evidence |
 | README and tracking plan | PASS | `../README.md`, `TRACKING-PLAN.md` |
 | Hosted deployment | PASS | Vercel production alias updated |
 | Demo video | NOT RUN | deferred by product owner |

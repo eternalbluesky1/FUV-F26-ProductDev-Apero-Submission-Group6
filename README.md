@@ -72,6 +72,8 @@ What worked: the source set was complete enough to define the core journey, the 
 
 This section describes the actual build process, not a claim that every integration is live.
 
+The brief names Claude as the build tool. This team used OpenCode with a non-Claude model for ideation support, specification, implementation, testing, and iteration, and the product itself calls OpenRouter. We record that substitution plainly and do not claim it was approved in advance. The full activity record is in [`StuDeal Project/docs/AI-WORKFLOW.md`](StuDeal%20Project/docs/AI-WORKFLOW.md).
+
 ## Testing and known limitations
 
 Commands:
@@ -124,6 +126,6 @@ Recording in progress. Filming is assigned to Lê Thanh Nghi. The link will be a
 
 ## Repository layout
 
-- `StuDeal Project/`: Next.js application, assets, tests, and project docs.
+- `StuDeal Project/`: Next.js application, assets, tests, and project docs. Rubric mapping: [`StuDeal Project/docs/RUBRIC-TRACKER.md`](StuDeal%20Project/docs/RUBRIC-TRACKER.md).
 - `llm-wiki/`: persistent working wiki for decisions and evidence.
 - `Original Docs/`: course and team source PDFs. Kept local and untracked.

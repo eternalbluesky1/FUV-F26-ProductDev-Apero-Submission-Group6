@@ -15,7 +15,9 @@ export function useCatalog(): PublicDeal[] {
       .then((remote) => {
         if (active && remote.length > 0) setDeals(remote);
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (active) window.dispatchEvent(new Event("studeal:fixture-fallback"));
+      });
     return () => {
       active = false;
     };
