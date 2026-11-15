@@ -21,18 +21,18 @@ The product can be usable and still fail the assignment if the repository, READM
 
 | Requirement | Evidence needed | State |
 |---|---|---|
-| One team GitHub repository with source | Remote configured at `https://github.com/eternalbluesky1/FUV-F26-ProductDev-Apero-Submission-Group6` | Repository exists; no app commit yet |
-| Independently runnable core journey | Home, interests or skip, deck, save or skip, summary, Pocket, detail | Not started |
-| Mobile-first and desktop support | Browser checks at 390x844, 320 px reflow, 1440x900 | Not started |
-| README with pitch, problem, users, features, launch path, revenue or acquisition hypothesis, setup, AI workflow, team, demo link | `README.md` at app root | Not started |
-| Tracking plan | `TRACKING-PLAN.md` or README section with event, trigger, properties, purpose, consent, limits | Not started |
-| Implemented analytics | Consent-gated PostHog events; at least one observed consented event if access permits | Not started |
-| Real Ask Mon path | Server-side non-Claude model with one read-only `search_deals` tool; labeled deterministic fallback | Not started |
-| Supabase catalog and click logging | Migrations, RLS, seed, outbound POST, 303 navigation | Not started; Docker unavailable locally |
-| Tests | Unit, Playwright journey, accessibility, two visual baselines | Not started |
-| Demo video | 2-3 minute recording of the real flow with mode disclosed | Not started |
-| Canvas submission | Repository, README, video submitted once per team | Not started |
-| AI-native process evidence | Actual tools, tasks, outcomes, failures, dates, contributors | This wiki and status ledger are the starting record |
+| One team GitHub repository with source | Remote configured at `https://github.com/eternalbluesky1/FUV-F26-ProductDev-Apero-Submission-Group6` | Repository exists; implementation commits pushed |
+| Independently runnable core journey | Home, interests or skip, deck, save or skip, summary, Pocket, detail | PASS; 8 E2E tests |
+| Mobile-first and desktop support | Browser checks at 390x844 and 1280x900 | PASS; 4 reviewed visual baselines |
+| README with pitch, problem, users, features, launch path, revenue or acquisition hypothesis, setup, AI workflow, team, demo link | `README.md` at app root | PASS except team names and demo link, which remain TBD |
+| Tracking plan | `TRACKING-PLAN.md` with event, trigger, properties, purpose, analytics choice, limits | PASS |
+| Implemented analytics | Default-on PostHog with opt-out; observed live events | PASS; production `landing_viewed` observed without `$opt_in` |
+| Real Ask Mon path | Server-side non-Claude model with one read-only `search_deals` tool; labeled failure fallback | PASS; live `mode=ai` verified |
+| Supabase catalog and click logging | Migrations, RLS, seed, outbound POST, 303 navigation | PASS on hosted Supabase; local stack blocked by Docker |
+| Tests | Unit, Playwright journey, accessibility, visual baselines | PASS; 46 unit, 8 E2E, 8 a11y, 4 visual |
+| Demo video | 2-3 minute recording of the real flow with mode disclosed | NOT RUN |
+| Canvas submission | Repository, README, video submitted once per team | NOT RUN |
+| AI-native process evidence | Actual tools, tasks, outcomes, failures, dates, contributors | This wiki and status ledger record the process |
 
 Course assessment context from `notes-brief` pages 1-2 and 4-5: Apero's gate is 70 percent of the grade, and instructor assessment is 30 percent. The source does not disclose the detailed gate. A non-passing product may receive partial credit up to 50 percent based on feedback. Do not claim a pass.
 
@@ -41,7 +41,8 @@ Course assessment context from `notes-brief` pages 1-2 and 4-5: Apero's gate is 
 - The exact Apero gate and subweights are not in the source. Do not invent them.
 - The course brief names Claude for AI use, but the user's decision is to use a different subscription and a non-Claude model for Ask Mon. Document the actual tools used.
 - Team member names, roles, and contributions are still TBD.
-- Hosted Supabase, PostHog, Vercel, and Canvas access must be verified separately. A local fixture run does not prove hosted integration.
+- The demo video and Canvas submission are not produced.
+- Client pages still use the fixture catalog while server pages use Supabase.
 
 ## Sources
 

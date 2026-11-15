@@ -7,7 +7,7 @@ sources: [prd, guide, offers-snapshot]
 confidence: high
 ---
 
-The implementation is a Next.js App Router application with strict TypeScript, Tailwind v4, Supabase Postgres, consent-gated PostHog, and a server-side OpenRouter call for Ask Mon. Fixture mode is an explicit local or demo mode, never a silent fallback presented as live data.
+The implementation is a Next.js App Router application with strict TypeScript, Tailwind v4, Supabase Postgres, default-on PostHog analytics with an opt-out, and a server-side OpenRouter call for Ask Mon. Fixture mode is an explicit local or demo mode, never a silent fallback presented as live data.
 
 ## What it is
 
@@ -19,24 +19,24 @@ Ask Mon accepts a query, bounded recent history, optional category slugs, a limi
 
 ## Why it matters
 
-The main failure modes are trust failures: fixtures shown as real offers, a model inventing prices, a click counted as a purchase, a public table exposing reviewer data, or analytics firing before consent. The architecture isolates each of those boundaries.
+The main failure modes are trust failures: fixtures shown as real offers, a model inventing prices, a click counted as a purchase, a public table exposing reviewer data, or analytics firing after an explicit opt-out. The architecture isolates each of those boundaries.
 
 ## Current state
 
-- App not initialized yet.
-- No package manager files, routes, migrations, or tests exist.
-- Docker is unavailable, so `supabase start` and local pgTAP cannot run. The hosted Supabase project is the intended integration path. Database tests are BLOCKED until a local runtime or hosted test path is available.
-- Vercel and Supabase projects exist from the prior session. No app has been linked or deployed.
-- PostHog MCP is connected to project `735307`, but no app event has been observed.
-- The PRD's temporary OpenRouter key is on page 43. It must be placed only in an ignored `.env.local` and never printed or committed.
+- The app is built with 15 routes including App Router icons, a 12-row fixture catalog, Supabase helpers, Ask Mon, and analytics.
+- Local development uses `NEXT_PUBLIC_STUDEAL_DATA_MODE=fixture`. Vercel production uses `supabase`.
+- The hosted Supabase project `ebtmlzewcesrensozyxm` has the migration applied and 12 public rows. Admin reads and click inserts use a valid `sb_secret_` key.
+- A production outbound POST returned 303 and inserted one `deal_clicks` row. The row was removed after verification.
+- PostHog project `735307` receives default-on events. A production visit produced `landing_viewed` without `$opt_in`.
+- Docker is unavailable, so `supabase start` and local pgTAP cannot run. The hosted path is the working integration.
+- The PRD's temporary OpenRouter key is stored only in ignored environment files and was not printed or committed.
+- The offer snapshot has no category column. Categories are curated in the seed.
 
 ## Open questions
 
-- Can the hosted Supabase keys be retrieved and used without exposing them? The CLI is authenticated.
-- How should fixture mode be selected on Vercel Preview without allowing it in production? Use `NEXT_PUBLIC_STUDEAL_DATA_MODE=fixture` only in explicit preview environments and reject it when `VERCEL_ENV=production`.
-- Which OpenRouter model is available and non-Claude? Verify after reading the key without printing it.
-- Will the PostHog project API key be available? If not, the consent UI and no-op adapter can ship, but live tracking remains BLOCKED.
-- The offer snapshot has no category column. Categories must be curated explicitly in the seed.
+- Client pages (`start`, `deck`, `summary`, `discover`, `pocket`, `ask-mon`) still read the fixture catalog directly. A shared Supabase-backed client loader is not implemented.
+- Which offers will be rechecked and presented as current for the final public release?
+- Do reviewers have access to the GitHub repository, the Vercel URL, and Canvas?
 
 ## Sources
 

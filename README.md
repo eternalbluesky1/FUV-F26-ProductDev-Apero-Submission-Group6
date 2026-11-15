@@ -18,10 +18,13 @@ Implemented and planned product surfaces:
 - Offer detail with eligibility, source, source-check date, and an official-source action.
 - Ask Mon with bounded recent history and a read-only `search_deals` tool.
 - Settings, Privacy, and Terms.
-- Consent-gated PostHog analytics with a no-op fallback when the key is missing.
-- Optional Supabase mode with a public-read RLS predicate and server-side click logging.
+- PostHog analytics on by default, with an explicit opt-out in Settings and a no-op adapter when the key is missing.
+- Supabase mode with a public-read RLS predicate and server-side click logging.
+- Bundled Baloo 2 and Be Vietnam Pro fonts, glassmorphism offer cards, local brand marks, and a mobile swipe deck.
+- Persistent top navigation and a mobile tab bar, so Ask Mon is one tap from every surface.
+- Ask Mon model selector, server-side model allowlist, and a daily source-recheck cron.
 
-The first release uses a reviewed snapshot of 12 offers from `assets/verified-offer-snapshot.csv`, checked on 13 November 2026. In fixture mode the UI shows a visible Vietnamese data-mode warning. A save is not a redemption. A click is not a purchase. A brand is not a partner.
+The catalog holds 37 deals across 27 brands in six categories, with source-check dates and enrichment fields. Local development uses fixture mode; Vercel production uses Supabase mode. A save is not a redemption. A click is not a purchase. A brand is not a partner.
 
 ## Launch channel and path to users or revenue
 
@@ -54,7 +57,7 @@ If the Supabase or PostHog configuration is absent, the app must stay usable and
 
 ## Tracking plan
 
-See [`StuDeal Project/TRACKING-PLAN.md`](StuDeal%20Project/TRACKING-PLAN.md). PostHog is consent-gated. Autocapture, automatic pageviews, pageleaves, session recording, surveys, and remote feature flags are disabled. No raw search text or chat text is sent. A live event in PostHog project `735307` is not yet observed.
+See [`StuDeal Project/TRACKING-PLAN.md`](StuDeal%20Project/TRACKING-PLAN.md). PostHog analytics are on by default and can be turned off in Settings. Autocapture, automatic pageviews, pageleaves, session recording, surveys, and remote feature flags are disabled. No raw search text or chat text is sent. Default-on and consented events were observed in PostHog project `735307`.
 
 ## AI-native workflow
 
@@ -62,7 +65,7 @@ Actual tools used in this build:
 
 - OpenCode coding agent for repository inspection, planning, implementation, and verification.
 - The agent separated source ingestion, UI implementation, API and database work, and documentation into bounded workstreams.
-- OpenRouter model `google/gemini-2.5-flash` is configured for Ask Mon and was verified with a live completion on 14 November 2026. The app still has a labeled deterministic matching fallback.
+- OpenRouter model `baidu/ernie-5.5-flash-preview:free` is the default for Ask Mon and was exercised through the live route on 15 November 2026. `Ling 3.2 Flash` and `Nemotron 3.5 Super VL` are selectable alternatives. The app still has a labeled deterministic matching fallback.
 - Generated screen concepts and mascot assets came from the supplied asset archive. The screens are references, not live screenshots.
 
 What worked: the source set was complete enough to define the core journey, the design tokens were machine-readable, and the OpenRouter key/model worked. What did not: Docker is unavailable, so the local Supabase stack and pgTAP path cannot run; the archive is missing `studeal-theme.css` and `SEED-IMPORT.md`; the PRD's last page is private and must not be committed.
@@ -88,35 +91,36 @@ Current evidence is recorded in [`StuDeal Project/docs/IMPLEMENTATION-STATUS.md`
 
 Verified evidence:
 
-- `pnpm typecheck`, `pnpm lint`, `pnpm test:unit` (41 tests), `pnpm build`, `pnpm test:e2e` (8 tests), `pnpm test:a11y` (8 scans), and `pnpm test:visual` (4 baselines) pass.
-- The hosted Supabase migration applied and the seed loaded 12 rows.
+- `pnpm typecheck`, `pnpm lint`, `pnpm test:unit` (61 tests), `pnpm build` (16 routes), `pnpm test:e2e` (24 tests), `pnpm test:a11y` (16 scans), and `pnpm test:visual` (8 baselines) pass.
+- The hosted Supabase migration applied and the seed loaded 37 public rows across 27 brands and 6 categories.
+- Production runs in Supabase mode. A production outbound POST returned 303 and inserted one `deal_clicks` row, which was removed after verification.
 - The production deployment is live at the URL above.
-- Ask Mon returned three cinema recommendations through the live OpenRouter route.
-- A consented `landing_viewed` event was observed in PostHog project `735307`.
+- Ask Mon returned three cinema recommendations through the live OpenRouter route, and a greeting returned a live `ai` answer instead of fallback.
+- A default-on `landing_viewed` event was observed in PostHog project `735307` without a new `$opt_in` event.
 
 Known limitations:
 
 - Local Supabase is blocked because Docker is unavailable.
-- Client pages still read the fixture catalog directly; the server-rendered home and detail paths use Supabase mode.
+- Every route reads the hosted catalog in production: server components through `getCatalog()`, client pages through the `useCatalog` hook. The bundled fixture is only the first paint and the offline fallback.
+- The daily cron checks source URLs for deals already in the catalog. It does not discover new brands or parse new promotions.
 - The offer snapshot is dated. Each offer must be rechecked before a public release.
-- The brand marks in the generated concepts are not approved artwork. The UI uses text brand names.
-- Team member names and contributions are TBD.
+- Brand marks are used for identification only. StuDeal claims no partnership or endorsement. Sources and licenses are recorded in [`StuDeal Project/docs/ASSET-SOURCES.md`](StuDeal%20Project/docs/ASSET-SOURCES.md).
+- Team member names and contributions are recorded below.
 - The demo video and Canvas submission are not yet produced.
 
 ## Team and contributions
 
 | Member | Role | Actual contribution |
 |---|---|---|
-| TBD | Product and coordination | TBD |
-| TBD | Design and frontend | TBD |
-| TBD | Data and integrations | TBD |
-| TBD | Testing and submission | TBD |
-
-The team must fill these rows with real names and contributions. Unknown entries must stay visibly TBD.
+| Ngô Võ Minh Thư | UI/UX, User Analytics | UI/UX and user analytics |
+| Trần Tiến Lợi | UI/UX, User Analytics | UI/UX and user analytics |
+| Lê Thanh Nghi | Problem-Solution brainstorming, Customer Journey Construction, UI/UX, Video filming | Problem-solution brainstorming, customer journey construction and UI/UX; demo video filming |
+| Võ Anh Thư | Problem-Solution brainstorming, Customer Journey Construction, UI/UX | Problem-solution brainstorming, customer journey construction and UI/UX |
+| Bùi Trí Anh Phát | End-to-end implementation | End-to-end implementation of the application |
 
 ## Demo video
 
-TBD. A real 2-3 minute recording of the running core flow is required. No video link exists yet.
+Recording in progress. Filming is assigned to Lê Thanh Nghi. The link will be added here once the recording exists and reviewer access has been tested. The shot list is in [`StuDeal Project/docs/VIDEO-SCRIPT.md`](StuDeal%20Project/docs/VIDEO-SCRIPT.md) and the pre-flight checklist in [`StuDeal Project/docs/VIDEO-HANDOFF.md`](StuDeal%20Project/docs/VIDEO-HANDOFF.md).
 
 ## Repository layout
 

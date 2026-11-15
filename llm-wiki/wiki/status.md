@@ -25,17 +25,20 @@ The project is time-boxed. A later session must be able to resume without guessi
 | Project initialization | PASS | `../StuDeal Project/package.json`, `pnpm install` exit 0 |
 | App routes | PASS | `../StuDeal Project/app/` |
 | Fixture catalog | PASS | `lib/catalog-data.ts`, 12 rows |
-| Unit tests | PASS | `pnpm test:unit`, 41 tests |
+| Unit tests | PASS | `pnpm test:unit`, 46 tests |
 | Typecheck | PASS | `pnpm typecheck` |
 | Lint | PASS | `pnpm lint`, no warnings or errors |
 | E2E tests | PASS | `pnpm test:e2e`, 8 tests |
 | Accessibility scans | PASS | `pnpm test:a11y`, 8 scans |
-| Visual regression | PASS | `pnpm test:visual`, 4 reviewed baselines |
-| Supabase migration and seed | PASS | migration applied; seed count 12 |
-| Supabase client mode | INCOMPLETE | server pages use Supabase mode; client pages still fixture |
-| Ask Mon live provider | PASS | 3 cinema recommendations returned through the live production route |
-| PostHog consent and events | PASS | consented `landing_viewed` observed in project `735307` |
-| Build | PASS | `pnpm build`, 13 routes |
+| Visual regression | PASS | `pnpm test:visual`, 4 reviewed baselines, mobile and desktop |
+| UI redesign | PASS | bundled fonts, local brand marks, glass cards, prominent categories, mobile swipe deck |
+| Supabase migration and seed | PASS | migration applied; 12 public rows |
+| Supabase production mode | PASS | Vercel mode `supabase`; public REST returns 12 rows |
+| Supabase click logging | PASS | production 303 inserted one `deal_clicks` row; test row deleted |
+| Supabase client mode | INCOMPLETE | server pages use Supabase; client pages still fixture |
+| Ask Mon live provider | PASS | `hello` and cinema queries returned `mode=ai`; 3 cinema recommendations |
+| PostHog default-on events | PASS | production `landing_viewed` observed in project `735307` without `$opt_in` |
+| Build | PASS | `pnpm build`, 15 routes including icons |
 | Deployment | PASS | https://fuv-f26-productdev-apero-submission.vercel.app |
 | Demo video | NOT RUN | no recording |
 | Canvas submission | NOT RUN | not prepared |
@@ -43,8 +46,8 @@ The project is time-boxed. A later session must be able to resume without guessi
 ## Open questions
 
 - The course deadline is 15 November 2026, 23:59 Vietnam time. The schedule is tight.
-- The app repository root and Vercel root directory need a decision. The current plan is to build inside `../StuDeal Project/` and set that as the Vercel root.
-- Hosted Supabase credentials, PostHog key, and OpenRouter model availability are unresolved.
+- The demo video and Canvas submission are not produced.
+- Client pages still read the fixture catalog directly.
 - Team names and contributions remain TBD.
 
 ## Sources

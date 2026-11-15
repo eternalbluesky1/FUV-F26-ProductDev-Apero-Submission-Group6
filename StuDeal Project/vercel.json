@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/recheck-sources",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
