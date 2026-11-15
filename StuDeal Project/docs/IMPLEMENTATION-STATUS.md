@@ -39,7 +39,7 @@ Deployment: https://fuv-f26-productdev-apero-submission.vercel.app
 | AI workflow phases | PASS | `../README.md` § AI-native workflow and `docs/AI-WORKFLOW.md` § 1 and 2.0 record the meeting, GPT-6 Luna drafting, GPT-6.1 Terra proofing, then development |
 | README and tracking plan | PASS | `../README.md`, `TRACKING-PLAN.md` |
 | Hosted deployment | PASS | Vercel production alias updated |
-| Demo video | NOT RUN | deferred by product owner |
+| Demo video | SUBMITTED | recorded by the team and included in the submitted Drive folder |
 | Canvas submission | NOT RUN | not prepared |
 
 ## Environment

@@ -125,7 +125,7 @@ Known limitations:
 
 ## Demo video
 
-Recording in progress. Filming is assigned to Lê Thanh Nghi. The link will be added here once the recording exists and reviewer access has been tested. The shot list is in [`StuDeal Project/docs/VIDEO-SCRIPT.md`](StuDeal%20Project/docs/VIDEO-SCRIPT.md) and the pre-flight checklist in [`StuDeal Project/docs/VIDEO-HANDOFF.md`](StuDeal%20Project/docs/VIDEO-HANDOFF.md).
+A 2 to 3 minute recording of the core flow was filmed by Lê Thanh Nghi and submitted together with the Google Drive folder that accompanies this repository. That folder also holds a Google Doc with the repository link and this README. The shot list is in [`StuDeal Project/docs/VIDEO-SCRIPT.md`](StuDeal%20Project/docs/VIDEO-SCRIPT.md) and the pre-flight checklist in [`StuDeal Project/docs/VIDEO-HANDOFF.md`](StuDeal%20Project/docs/VIDEO-HANDOFF.md).
 
 ## Repository layout
 

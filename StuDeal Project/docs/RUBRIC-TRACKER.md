@@ -25,7 +25,7 @@ Status values: PASS (evidence exists), PARTIAL (criterion met with a disclosed l
 | README: AI-native workflow, what worked and what did not | `../README.md` § AI-native workflow; `AI-WORKFLOW.md` | PASS |
 | README: team members with roles and contributions | `../README.md` § Team and contributions | PASS |
 | Tracking plan: events, what each measures, why it matters | `../TRACKING-PLAN.md` | PASS |
-| 2 to 3 minute demo video linked from the README | `../README.md` § Demo video | NOT RUN. Filming assigned to Lê Thanh Nghi; shot list in `VIDEO-SCRIPT.md`, pre-flight in `VIDEO-HANDOFF.md`. |
+| 2 to 3 minute demo video linked from the README | `../README.md` § Demo video | PASS. Recorded by Lê Thanh Nghi and submitted in the team Drive folder. The README names the folder rather than linking it directly. |
 | Submit repository link, README and video on Canvas, one per team | None | NOT RUN |
 
 ## Disclosed deviations
