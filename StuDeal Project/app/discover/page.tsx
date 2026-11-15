@@ -6,16 +6,34 @@ import { useSearchParams } from "next/navigation";
 import { EmptyState } from "@/components/empty-state";
 import { OfferCard } from "@/components/offer-card";
 import { capture } from "@/lib/analytics";
-import { getPublicDeals, normalize } from "@/lib/catalog";
+import { normalize } from "@/lib/catalog";
+import { useCatalog } from "@/lib/use-catalog";
 import { CATEGORY_LABELS } from "@/lib/catalog-data";
 import type { Category, PublicDeal } from "@/lib/types";
 
-const CATEGORY_KEYS: Category[] = ["cinema", "food", "software", "learning"];
+const CATEGORY_KEYS: Category[] = [
+  "cinema",
+  "food",
+  "software",
+  "learning",
+  "shopping",
+  "transport"
+];
 
 const CATEGORY_OPTIONS: Array<{ value: Category | "all"; label: string }> = [
   { value: "all", label: "Tất cả" },
   ...CATEGORY_KEYS.map((key) => ({ value: key, label: CATEGORY_LABELS[key] ?? key }))
 ];
+
+const CATEGORY_HINTS: Record<Category | "all", string> = {
+  all: "Toàn bộ danh mục",
+  cinema: "Vé rạp, ưu đãi U22",
+  food: "Cà phê, voucher",
+  software: "Công cụ học tập",
+  learning: "Khóa học, tài nguyên",
+  shopping: "Giảm giá thiết bị, mua sắm",
+  transport: "Vé điện, đi lại"
+};
 
 function isCategory(value: string | null): value is Category {
   return value !== null && (CATEGORY_KEYS as string[]).includes(value);
@@ -37,7 +55,7 @@ function matchesQuery(deal: PublicDeal, needle: string): boolean {
 function DiscoverView() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
-  const [deals] = useState<PublicDeal[]>(() => getPublicDeals());
+  const deals = useCatalog();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category | "all">(
     isCategory(categoryParam) ? categoryParam : "all"
@@ -92,22 +110,55 @@ function DiscoverView() {
   return (
     <div className="page-wrap py-8">
       <header className="max-w-2xl">
-        <p className="inline-flex rounded-full bg-brand-purple/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-brand-purple">
-          Danh mục hiện hành
-        </p>
-        <h1 className="mt-3 font-display text-4xl leading-tight font-bold text-ink sm:text-5xl">
+        <h1 className="font-display text-4xl leading-tight font-bold text-ink sm:text-5xl">
           Khám phá ưu đãi
         </h1>
-        <p className="mt-2 text-base text-muted">
-          Tìm theo tên thương hiệu, mức giảm hoặc điều kiện. Kết quả chỉ gồm ưu đãi đang hiện hành
-          trong danh mục.
-        </p>
       </header>
+
+      <div
+        className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4"
+        role="group"
+        aria-label="Lọc theo lĩnh vực"
+      >
+        {CATEGORY_OPTIONS.map((option) => {
+          const active = category === option.value;
+          return (
+            <button
+              key={option.value}
+              type="button"
+              aria-pressed={active}
+              aria-label={option.label}
+              onClick={() => selectCategory(option.value)}
+              className={`flex min-h-20 flex-col justify-between rounded-2xl border p-4 text-left transition ${
+                option.value === "all" ? "col-span-2 sm:col-span-4" : ""
+              } ${
+                active
+                  ? "border-brand-purple bg-brand-purple text-white shadow-card"
+                  : "border-border bg-white text-ink hover:border-brand-purple hover:text-brand-purple"
+              }`}
+            >
+              <span className="font-display text-lg leading-tight font-bold sm:text-xl">
+                {option.label}
+              </span>
+              <span
+                className={`mt-1 text-xs font-semibold ${active ? "text-white" : "text-muted"}`}
+              >
+                {CATEGORY_HINTS[option.value]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="mt-6 max-w-2xl text-base text-muted">
+        Tìm theo tên thương hiệu, mức giảm hoặc điều kiện. Kết quả chỉ gồm ưu đãi đang hiện hành
+        trong danh mục.
+      </p>
 
       <form
         role="search"
         onSubmit={handleSubmit}
-        className="mt-6 flex flex-col gap-2 sm:flex-row"
+        className="mt-4 flex flex-col gap-2 sm:flex-row"
       >
         <div className="flex-1">
           <label htmlFor="discover-search" className="sr-only">
@@ -130,27 +181,6 @@ function DiscoverView() {
           Tìm ưu đãi
         </button>
       </form>
-
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-1" role="group" aria-label="Lọc theo lĩnh vực">
-        {CATEGORY_OPTIONS.map((option) => {
-          const active = category === option.value;
-          return (
-            <button
-              key={option.value}
-              type="button"
-              aria-pressed={active}
-              onClick={() => selectCategory(option.value)}
-              className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                active
-                  ? "border-brand-purple bg-brand-purple text-white"
-                  : "border-border bg-white text-ink hover:border-brand-purple hover:text-brand-purple"
-              }`}
-            >
-              {option.label}
-            </button>
-          );
-        })}
-      </div>
 
       <p className="mt-5 text-sm font-semibold text-ink" aria-live="polite">
         {countText}

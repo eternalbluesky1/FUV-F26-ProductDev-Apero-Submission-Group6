@@ -11,15 +11,18 @@ export default function PrivacyPage() {
         <section>
           <h2 className="font-display text-2xl font-bold text-ink">Dữ liệu trên trình duyệt</h2>
           <p className="mt-2">
-            Lựa chọn lĩnh vực, danh sách ưu đãi đã lưu và trạng thái đồng ý được lưu trong localStorage
-            của trình duyệt. StuDeal không có tài khoản và không đồng bộ dữ liệu này giữa các thiết bị.
+            Lựa chọn lĩnh vực, danh sách ưu đãi đã lưu và lựa chọn bật hoặc tắt phân tích được lưu
+            trong localStorage của trình duyệt. StuDeal không có tài khoản và không đồng bộ dữ liệu
+            này giữa các thiết bị.
           </p>
         </section>
         <section>
           <h2 className="font-display text-2xl font-bold text-ink">Phân tích</h2>
           <p className="mt-2">
-            PostHog chỉ được tải sau khi bạn đồng ý. StuDeal tắt autocapture, pageview tự động, ghi hình
-            phiên và khảo sát. Các sự kiện được thiết kế để không chứa nội dung câu hỏi, email, mã sinh
+            StuDeal dùng PostHog cho phân tích ẩn danh. PostHog được bật mặc định và bạn có thể tắt
+            trong <Link href="/settings" className="font-semibold text-brand-purple underline">Cài đặt</Link>.
+            StuDeal tắt lượt xem trang tự động, ghi hình phiên, khảo sát và tự động thu thập. Các sự
+            kiện được thiết kế để không chứa nội dung trò chuyện, nội dung tìm kiếm, email, mã sinh
             viên hoặc dữ liệu nhạy cảm.
           </p>
         </section>

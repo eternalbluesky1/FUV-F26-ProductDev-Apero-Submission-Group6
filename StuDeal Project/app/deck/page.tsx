@@ -5,8 +5,9 @@ import Link from "next/link";
 import { EmptyState } from "@/components/empty-state";
 import { Mascot } from "@/components/mascot";
 import { OfferCard } from "@/components/offer-card";
+import { SwipeCard } from "@/components/swipe-card";
 import { capture } from "@/lib/analytics";
-import { getPublicDeals } from "@/lib/catalog";
+import { useCatalog } from "@/lib/use-catalog";
 import { loadGuestState, saveGuestState } from "@/lib/storage";
 import type { GuestState, PublicDeal } from "@/lib/types";
 
@@ -16,7 +17,7 @@ export default function DeckPage() {
   const [hydrated, setHydrated] = useState(false);
   const [announcement, setAnnouncement] = useState("");
 
-  const catalog = useMemo(() => getPublicDeals(), []);
+  const catalog = useCatalog();
   const dealById = useMemo(() => new Map(catalog.map((deal) => [deal.id, deal])), [catalog]);
 
   useEffect(() => {
@@ -176,8 +177,13 @@ export default function DeckPage() {
             </p>
 
             <div className="mt-4">
-              <OfferCard deal={current} saved={currentState.savedIds.includes(current.id)} compact />
+              <SwipeCard key={current.id} onSwipe={recordAction}>
+                <OfferCard deal={current} saved={currentState.savedIds.includes(current.id)} compact />
+              </SwipeCard>
             </div>
+            <p className="mt-2 text-center text-xs text-muted sm:hidden">
+              Vuốt phải để lưu, vuốt trái để bỏ qua.
+            </p>
 
             <div className="mt-3 grid gap-2 sm:grid-cols-3">
               <button

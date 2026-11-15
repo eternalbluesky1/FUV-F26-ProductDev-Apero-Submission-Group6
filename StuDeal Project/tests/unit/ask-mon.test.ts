@@ -88,6 +88,21 @@ describe("requestSchema", () => {
   });
 });
 
+function assistantContent(content: string) {
+  return {
+    choices: [{ message: { role: "assistant", content }, finish_reason: "stop" }]
+  };
+}
+
+function stubProvider(content: string) {
+  const fetchMock = vi.fn().mockResolvedValue({
+    ok: true,
+    json: async () => assistantContent(content)
+  });
+  vi.stubGlobal("fetch", fetchMock);
+  return fetchMock;
+}
+
 describe("askMon without a provider key", () => {
   it("uses deterministic matching over the fixture catalog", async () => {
     const result = await askMon({ query: "galaxy" });
@@ -114,9 +129,43 @@ describe("askMon without a provider key", () => {
     expect(result.recommendations).toEqual([]);
   });
 
-  it("falls back deterministically when the provider call fails", async () => {
+  it("rejects invalid input before reading the catalog", async () => {
+    await expect(askMon({ query: "" })).rejects.toThrow();
+  });
+});
+
+describe("askMon with a configured provider", () => {
+  beforeEach(() => {
     vi.stubEnv("OPENROUTER_API_KEY", "test-key");
     vi.stubEnv("OPENROUTER_MODEL", "test-model");
+  });
+
+  it("returns a plain-text greeting as a live AI reply, not fallback", async () => {
+    stubProvider("Chào bạn, mình là Mon. Bạn muốn tìm ưu đãi phim hay ăn uống hôm nay?");
+
+    const result = await askMon({ query: "hello" });
+
+    expect(result.mode).toBe("ai");
+    expect(result.recommendations).toEqual([]);
+    expect(result.reply_markdown).toContain("Mon");
+  });
+
+  it("returns a no-result answer as live AI with no recommendations", async () => {
+    stubProvider(
+      JSON.stringify({
+        reply_markdown: "Mình chưa tìm thấy ưu đãi phù hợp. Bạn thử từ khóa khác nhé.",
+        recommendations: []
+      })
+    );
+
+    const result = await askMon({ query: "khong-co-uu-dai-nao" });
+
+    expect(result.mode).toBe("ai");
+    expect(result.recommendations).toEqual([]);
+    expect(result.reply_markdown.length).toBeGreaterThan(0);
+  });
+
+  it("returns fallback only when the provider call actually fails", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
 
     const result = await askMon({ query: "galaxy" });
@@ -125,7 +174,43 @@ describe("askMon without a provider key", () => {
     expect(result.recommendations.length).toBeGreaterThan(0);
   });
 
-  it("rejects invalid input before reading the catalog", async () => {
-    await expect(askMon({ query: "" })).rejects.toThrow();
+  it("treats a truncated JSON answer as live text, not a provider failure", async () => {
+    stubProvider('{"reply_markdown": "Mình đang tìm ưu đãi cho bạn", "recommendations": [');
+
+    const result = await askMon({ query: "hello" });
+
+    expect(result.mode).toBe("ai");
+    expect(result.mode).not.toBe("fallback");
+    expect(result.reply_markdown).toBe("Mình đang tìm ưu đãi cho bạn");
+    expect(result.recommendations).toEqual([]);
+  });
+
+  it("uses catalog matching, not fallback, when JSON has no usable reply", async () => {
+    stubProvider('{"unexpected": true}');
+
+    const result = await askMon({ query: "galaxy" });
+
+    expect(result.mode).toBe("matching");
+    expect(result.recommendations.length).toBeGreaterThan(0);
+  });
+
+  it("keeps catalog-grounded recommendations and filters unknown deal ids", async () => {
+    const known = CATALOG[0];
+    stubProvider(
+      JSON.stringify({
+        reply_markdown: "Mình gợi ý ưu đãi này cho bạn.",
+        recommendations: [
+          { deal_id: "00000000-0000-4000-8000-999999999999", reason: "Không có trong danh mục." },
+          { deal_id: known.id, reason: "Có trong danh mục hiện hành." }
+        ]
+      })
+    );
+
+    const result = await askMon({ query: "galaxy" });
+
+    expect(result.mode).toBe("ai");
+    expect(result.recommendations.map((item) => item.deal.id)).toEqual([known.id]);
+    expect(result.recommendations[0].deal.source_url).toBe(known.source_url);
+    expect(result.recommendations[0].reason).toBe("Có trong danh mục hiện hành.");
   });
 });

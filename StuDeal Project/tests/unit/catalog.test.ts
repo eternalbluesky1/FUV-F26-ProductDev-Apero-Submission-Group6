@@ -30,6 +30,10 @@ function baseDeal(overrides: Partial<PublicDeal> = {}): PublicDeal {
     cities: null,
     starts_at: null,
     expires_at: null,
+    brand_slug: null,
+    value_kind: "other",
+    source_last_status: null,
+    source_last_checked_at: null,
     ...overrides
   };
 }
@@ -112,7 +116,21 @@ describe("searchDeals", () => {
   it("matches Vietnamese text without accents", () => {
     const results = searchDeals("sinh vien", undefined, 3, CATALOG);
     expect(results.length).toBeGreaterThan(0);
-    expect(results.some((deal) => deal.slug === "cgv-student-ticket")).toBe(true);
+    expect(results.map((deal) => deal.slug)).toEqual(
+      searchDeals("sinh viên", undefined, 3, CATALOG).map((deal) => deal.slug)
+    );
+  });
+
+  it("surfaces student-eligible offers for a student query", () => {
+    const results = searchDeals("sinh vien", undefined, 3, CATALOG);
+    expect(results.length).toBeGreaterThan(0);
+    expect(
+      results.every(
+        (deal) =>
+          deal.eligibility_kind === "student_only" ||
+          deal.eligibility_kind === "student_verified_education"
+      )
+    ).toBe(true);
   });
 
   it("filters by category", () => {

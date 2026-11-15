@@ -1,20 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
-import { CATALOG } from "./catalog-data";
-import { getPublicDeals, isCurrentlyPublic } from "./catalog";
+import { getPublicDeals } from "./catalog";
+import { fetchPublicDeals, getDataMode } from "./supabase-public";
 import type { PublicDeal } from "./types";
 
-export type DataMode = "fixture" | "supabase";
-
-export function getDataMode(): DataMode {
-  return process.env.NEXT_PUBLIC_STUDEAL_DATA_MODE === "fixture" ? "fixture" : "supabase";
-}
-
-function publicClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) throw new Error("Supabase public configuration is missing");
-  return createClient(url, key, { auth: { persistSession: false } });
-}
+export type { DataMode } from "./supabase-public";
+export { getDataMode, hasPublicSupabaseConfig } from "./supabase-public";
 
 function secretClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -24,18 +14,7 @@ function secretClient() {
 }
 
 export async function getCatalog(): Promise<PublicDeal[]> {
-  if (getDataMode() === "fixture") return getPublicDeals();
-  const supabase = publicClient();
-  const now = new Date().toISOString();
-  const { data, error } = await supabase
-    .from("deals")
-    .select("*")
-    .eq("content_status", "current_snapshot")
-    .not("source_checked_at", "is", null)
-    .gt("review_by", now)
-    .order("slug", { ascending: true });
-  if (error) throw new Error(error.message);
-  return (data as PublicDeal[]).filter((deal) => isCurrentlyPublic(deal));
+  return fetchPublicDeals();
 }
 
 export async function getDealByIdServer(id: string): Promise<PublicDeal | undefined> {
@@ -77,5 +56,5 @@ export function isAllowedDestination(deal: PublicDeal, candidate: string): boole
 }
 
 export function fixtureCatalogSize(): number {
-  return CATALOG.length;
+  return getPublicDeals().length;
 }

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getCatalog } from "./supabase";
 import { searchDeals } from "./catalog";
+import { resolveModel } from "./ask-mon-models";
 import type { AskMonResponse, PublicDeal, Recommendation } from "./types";
 
 const requestSchema = z.object({
@@ -16,22 +17,18 @@ const requestSchema = z.object({
     .optional(),
   categories: z.array(z.string()).max(4).optional(),
   limit: z.number().int().min(1).max(3).optional(),
-  recent_deal_ids: z.array(z.string()).max(3).optional()
+  recent_deal_ids: z.array(z.string()).max(3).optional(),
+  model: z.string().max(120).optional()
 });
 
 export type AskMonRequest = z.infer<typeof requestSchema>;
 
-const finalSchema = z.object({
-  reply_markdown: z.string().min(1).max(4000),
-  recommendations: z
-    .array(
-      z.object({
-        deal_id: z.string(),
-        reason: z.string().min(1).max(300)
-      })
-    )
-    .max(3)
+const recommendationSchema = z.object({
+  deal_id: z.string().trim().min(1),
+  reason: z.string().trim().min(1).max(300)
 });
+
+const MAX_REPLY_LENGTH = 4000;
 
 const searchTool = {
   type: "function",
@@ -45,7 +42,7 @@ const searchTool = {
         query: { type: "string", description: "Từ khóa ngắn, có thể có dấu tiếng Việt." },
         category: {
           type: "string",
-          enum: ["cinema", "food", "software", "learning"],
+          enum: ["cinema", "food", "software", "learning", "shopping", "transport"],
           description: "Danh mục tùy chọn."
         },
         limit: { type: "integer", minimum: 1, maximum: 3 }
@@ -89,9 +86,11 @@ function systemPrompt(): string {
   ].join("\n");
 }
 
-async function callOpenRouter(messages: OpenRouterMessage[]): Promise<OpenRouterResponse> {
+async function callOpenRouter(
+  messages: OpenRouterMessage[],
+  model: string
+): Promise<OpenRouterResponse> {
   const key = process.env.OPENROUTER_API_KEY;
-  const model = process.env.OPENROUTER_MODEL;
   if (!key || !model) throw new Error("OpenRouter is not configured");
   const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
@@ -126,12 +125,80 @@ function parseJsonContent(content: string): unknown {
   }
 }
 
+interface InterpretedReply {
+  reply_markdown: string;
+  recommendations: Recommendation[];
+  fromJson: boolean;
+}
+
+function unfence(content: string): string {
+  return content.replace(/^```[a-z]*\s*/i, "").replace(/```\s*$/i, "").trim();
+}
+
+function salvageReplyText(content: string): string | null {
+  const match = content.match(/"reply_markdown"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+  if (!match) return null;
+  try {
+    const decoded: unknown = JSON.parse(`"${match[1]}"`);
+    if (typeof decoded !== "string") return null;
+    const text = decoded.trim();
+    return text ? text.slice(0, MAX_REPLY_LENGTH) : null;
+  } catch {
+    return null;
+  }
+}
+
+function interpretFinalContent(content: string, catalog: PublicDeal[]): InterpretedReply | null {
+  const raw = content.trim();
+  if (!raw) return null;
+  const unfenced = unfence(raw);
+
+  let parsed: unknown;
+  try {
+    parsed = parseJsonContent(raw);
+  } catch {
+    const salvaged = salvageReplyText(unfenced);
+    if (salvaged) return { reply_markdown: salvaged, recommendations: [], fromJson: false };
+    if (unfenced.startsWith("{") || unfenced.startsWith("[")) return null;
+    return { reply_markdown: raw.slice(0, MAX_REPLY_LENGTH), recommendations: [], fromJson: false };
+  }
+
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return null;
+  const record = parsed as Record<string, unknown>;
+  const replySource =
+    (typeof record.reply_markdown === "string" && record.reply_markdown) ||
+    (typeof record.reply === "string" && record.reply) ||
+    (typeof record.message === "string" && record.message) ||
+    (typeof record.text === "string" && record.text) ||
+    "";
+  const reply = replySource.trim().slice(0, MAX_REPLY_LENGTH);
+  if (!reply) return null;
+
+  const candidates: Array<{ deal_id: string; reason: string }> = [];
+  if (Array.isArray(record.recommendations)) {
+    for (const item of record.recommendations) {
+      const parsedItem = recommendationSchema.safeParse(item);
+      if (!parsedItem.success) continue;
+      candidates.push(parsedItem.data);
+      if (candidates.length === 3) break;
+    }
+  }
+
+  return {
+    reply_markdown: reply,
+    recommendations: toRecommendations(candidates, catalog),
+    fromJson: true
+  };
+}
+
 function executeTool(name: string, rawArgs: string, catalog: PublicDeal[]): PublicDeal[] {
   if (name !== "search_deals") throw new Error("Unknown tool");
   const parsed = z
     .object({
       query: z.string().max(200),
-      category: z.enum(["cinema", "food", "software", "learning"]).optional(),
+      category: z
+        .enum(["cinema", "food", "software", "learning", "shopping", "transport"])
+        .optional(),
       limit: z.number().int().min(1).max(3).optional()
     })
     .parse(JSON.parse(rawArgs));
@@ -152,16 +219,18 @@ function toRecommendations(ids: Array<{ deal_id: string; reason: string }>, cata
   return output;
 }
 
+const GREETING_PATTERN = /^(hi|hello|chào|chao|xin chào|xin chao|hey)\b/i;
+
 function deterministic(query: string, catalog: PublicDeal[], mode: "matching" | "fallback"): AskMonResponse {
-  const deals = searchDeals(query, undefined, 3, catalog);
-  const greeting = /^(hi|hello|chào|chao|xin chào|xin chao|hey)\b/i.test(query.trim());
-  if (greeting && deals.length === 0) {
+  if (GREETING_PATTERN.test(query.trim())) {
     return {
       mode,
       reply_markdown: "Chào bạn, mình là Mon. Bạn muốn tìm ưu đãi phim, ăn uống, phần mềm hay học tập?",
       recommendations: []
     };
   }
+
+  const deals = searchDeals(query, undefined, 3, catalog);
   if (deals.length === 0) {
     return {
       mode,
@@ -184,7 +253,7 @@ export async function askMon(input: unknown): Promise<AskMonResponse> {
   const request = requestSchema.parse(input);
   const catalog = await getCatalog();
   const key = process.env.OPENROUTER_API_KEY;
-  const model = process.env.OPENROUTER_MODEL;
+  const model = resolveModel(request.model);
   if (!key || !model) return deterministic(request.query, catalog, "matching");
 
   const messages: OpenRouterMessage[] = [
@@ -199,11 +268,11 @@ export async function askMon(input: unknown): Promise<AskMonResponse> {
   try {
     const toolDeals = new Map<string, PublicDeal>();
     for (let round = 0; round < 3; round += 1) {
-      const response = await callOpenRouter(messages);
+      const response = await callOpenRouter(messages, model);
       const message = response.choices?.[0]?.message;
       if (!message) throw new Error("OpenRouter returned no message");
       if (message.tool_calls?.length) {
-        if (round === 2) break;
+        if (round === 2) throw new Error("Tool loop did not converge");
         messages.push(message);
         for (const call of message.tool_calls.slice(0, 3)) {
           const results = executeTool(call.function.name, call.function.arguments, catalog);
@@ -229,20 +298,21 @@ export async function askMon(input: unknown): Promise<AskMonResponse> {
         }
         continue;
       }
-      const parsed = finalSchema.safeParse(parseJsonContent(message.content ?? ""));
-      if (!parsed.success) throw new Error("Invalid final JSON");
-      const recommendations = toRecommendations(parsed.data.recommendations, catalog);
-      if (recommendations.length === 0 && toolDeals.size > 0) {
-        return {
-          mode: "ai",
-          reply_markdown: parsed.data.reply_markdown,
-          recommendations: [...toolDeals.values()].slice(0, 3).map((deal) => ({
-            deal,
-            reason: "Kết quả từ danh mục hiện tại."
-          }))
-        };
-      }
-      return { mode: "ai", reply_markdown: parsed.data.reply_markdown, recommendations };
+      const content = message.content ?? "";
+      if (!content.trim()) throw new Error("OpenRouter returned an empty message");
+
+      const interpreted = interpretFinalContent(content, catalog);
+      if (!interpreted) return deterministic(request.query, catalog, "matching");
+
+      const recommendations =
+        interpreted.fromJson && interpreted.recommendations.length === 0 && toolDeals.size > 0
+          ? [...toolDeals.values()].slice(0, 3).map((deal) => ({
+              deal,
+              reason: "Kết quả từ danh mục hiện tại."
+            }))
+          : interpreted.recommendations;
+
+      return { mode: "ai", reply_markdown: interpreted.reply_markdown, recommendations };
     }
     throw new Error("Tool loop ended without final answer");
   } catch {

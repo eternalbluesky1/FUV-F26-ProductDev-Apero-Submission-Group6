@@ -2,6 +2,15 @@ import type { Category, GuestState } from "./types";
 
 const KEY = "studeal:guest:v1";
 
+export const CATEGORY_KEYS: Category[] = [
+  "cinema",
+  "food",
+  "software",
+  "learning",
+  "shopping",
+  "transport"
+];
+
 export const emptyState: GuestState = {
   version: 1,
   selectedInterests: [],
@@ -30,7 +39,7 @@ export function loadGuestState(): LoadResult {
         version: 1,
         selectedInterests: Array.isArray(parsed.selectedInterests)
           ? (parsed.selectedInterests.filter((x) =>
-              ["cinema", "food", "software", "learning"].includes(x as string)
+              CATEGORY_KEYS.includes(x as Category)
             ) as Category[])
           : [],
         onboarding:

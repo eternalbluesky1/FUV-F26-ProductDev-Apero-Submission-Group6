@@ -14,11 +14,13 @@ export type MascotPose = keyof typeof sources;
 export function Mascot({
   pose = "welcome",
   className = "",
-  alt = ""
+  alt = "",
+  priority = false
 }: {
   pose?: MascotPose;
   className?: string;
   alt?: string;
+  priority?: boolean;
 }) {
   return (
     <Image
@@ -27,7 +29,7 @@ export function Mascot({
       width={360}
       height={360}
       className={className}
-      priority={pose === "welcome"}
+      priority={priority || pose === "welcome"}
     />
   );
 }

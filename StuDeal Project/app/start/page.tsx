@@ -1,19 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mascot } from "@/components/mascot";
-import { getPublicDeals, rankDeck } from "@/lib/catalog";
+import { rankDeck } from "@/lib/catalog";
 import { CATEGORY_LABELS } from "@/lib/catalog-data";
 import { loadGuestState, saveGuestState } from "@/lib/storage";
+import { useCatalog } from "@/lib/use-catalog";
 import type { Category, GuestState } from "@/lib/types";
 
 const options: Array<{ key: Category; title: string; body: string }> = [
   { key: "cinema", title: "Phim ảnh", body: "Vé rạp, suất chiếu, ưu đãi U22." },
   { key: "food", title: "Ăn uống", body: "Cà phê, voucher, ưu đãi thành viên." },
   { key: "software", title: "Phần mềm", body: "Công cụ học tập và sáng tạo." },
-  { key: "learning", title: "Học tập", body: "Khóa học, tài nguyên, chứng chỉ." }
+  { key: "learning", title: "Học tập", body: "Khóa học, tài nguyên, chứng chỉ." },
+  { key: "shopping", title: "Mua sắm", body: "Giảm giá thiết bị, voucher mua sắm." },
+  { key: "transport", title: "Di chuyển", body: "Vé xe buýt, giá vé sinh viên." }
 ];
 
 export default function StartPage() {
@@ -29,7 +32,7 @@ export default function StartPage() {
     setSelected(loaded.state.selectedInterests);
   }, []);
 
-  const deals = useMemo(() => getPublicDeals(), []);
+  const deals = useCatalog();
   const canContinue = selected.length >= 3;
 
   function toggle(key: Category) {

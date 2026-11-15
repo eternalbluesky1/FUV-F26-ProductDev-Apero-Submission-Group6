@@ -1,0 +1,339 @@
+{
+  "retrieved_at": "2026-11-14",
+  "entries": [
+    {
+      "filename": "figma.svg",
+      "brand": "Figma",
+      "source_url": "https://cdn.simpleicons.org/figma/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 1108
+    },
+    {
+      "filename": "notion.svg",
+      "brand": "Notion",
+      "source_url": "https://cdn.simpleicons.org/notion/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 993
+    },
+    {
+      "filename": "google.svg",
+      "brand": "Google",
+      "source_url": "https://cdn.simpleicons.org/google/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 472
+    },
+    {
+      "filename": "googlecloud.svg",
+      "brand": "Google Cloud",
+      "source_url": "https://cdn.simpleicons.org/googlecloud/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 698
+    },
+    {
+      "filename": "mongodb.svg",
+      "brand": "MongoDB",
+      "source_url": "https://cdn.simpleicons.org/mongodb/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 542
+    },
+    {
+      "filename": "pluralsight.svg",
+      "brand": "Pluralsight",
+      "source_url": "https://cdn.simpleicons.org/pluralsight/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 508
+    },
+    {
+      "filename": "coursera.svg",
+      "brand": "Coursera",
+      "source_url": "https://cdn.simpleicons.org/coursera/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 691
+    },
+    {
+      "filename": "udemy.svg",
+      "brand": "Udemy",
+      "source_url": "https://cdn.simpleicons.org/udemy/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 392
+    },
+    {
+      "filename": "shopee.svg",
+      "brand": "Shopee",
+      "source_url": "https://cdn.simpleicons.org/shopee/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 1222
+    },
+    {
+      "filename": "spotify.svg",
+      "brand": "Spotify",
+      "source_url": "https://cdn.simpleicons.org/spotify/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 712
+    },
+    {
+      "filename": "netflix.svg",
+      "brand": "Netflix",
+      "source_url": "https://cdn.simpleicons.org/netflix/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 291
+    },
+    {
+      "filename": "grammarly.svg",
+      "brand": "Grammarly",
+      "source_url": "https://cdn.simpleicons.org/grammarly/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 631
+    },
+    {
+      "filename": "digitalocean.svg",
+      "brand": "DigitalOcean",
+      "source_url": "https://cdn.simpleicons.org/digitalocean/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 446
+    },
+    {
+      "filename": "replit.svg",
+      "brand": "Replit",
+      "source_url": "https://cdn.simpleicons.org/replit/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 341
+    },
+    {
+      "filename": "namecheap.svg",
+      "brand": "Namecheap",
+      "source_url": "https://cdn.simpleicons.org/namecheap/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 704
+    },
+    {
+      "filename": "cloudflare.svg",
+      "brand": "Cloudflare",
+      "source_url": "https://cdn.simpleicons.org/cloudflare/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 1193
+    },
+    {
+      "filename": "netlify.svg",
+      "brand": "Netlify",
+      "source_url": "https://cdn.simpleicons.org/netlify/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 671
+    },
+    {
+      "filename": "vercel.svg",
+      "brand": "Vercel",
+      "source_url": "https://cdn.simpleicons.org/vercel/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 147
+    },
+    {
+      "filename": "supabase.svg",
+      "brand": "Supabase",
+      "source_url": "https://cdn.simpleicons.org/supabase/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 318
+    },
+    {
+      "filename": "edx.svg",
+      "brand": "edX",
+      "source_url": "https://cdn.simpleicons.org/edx/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 2147
+    },
+    {
+      "filename": "udacity.svg",
+      "brand": "Udacity",
+      "source_url": "https://cdn.simpleicons.org/udacity/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 496
+    },
+    {
+      "filename": "skillshare.svg",
+      "brand": "Skillshare",
+      "source_url": "https://cdn.simpleicons.org/skillshare/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 2098
+    },
+    {
+      "filename": "leetcode.svg",
+      "brand": "LeetCode",
+      "source_url": "https://cdn.simpleicons.org/leetcode/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 928
+    },
+    {
+      "filename": "youtube.svg",
+      "brand": "YouTube",
+      "source_url": "https://cdn.simpleicons.org/youtube/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 474
+    },
+    {
+      "filename": "postman.svg",
+      "brand": "Postman",
+      "source_url": "https://cdn.simpleicons.org/postman/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 1383
+    },
+    {
+      "filename": "docker.svg",
+      "brand": "Docker",
+      "source_url": "https://cdn.simpleicons.org/docker/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 1780
+    },
+    {
+      "filename": "linux.svg",
+      "brand": "Linux",
+      "source_url": "https://cdn.simpleicons.org/linux/101828",
+      "source_type": "simple-icons",
+      "license": "CC0 1.0 (Simple Icons icon set); trademark of the brand owner",
+      "bytes": 5478
+    },
+    {
+      "filename": "canva.png",
+      "brand": "Canva",
+      "source_url": "https://static.canva.com/anon_home/canva-logo.png",
+      "source_type": "official-site",
+      "license": "Trademark of the brand owner; retrieved from the brand's own site for identification only",
+      "bytes": 13580,
+      "requested_filename": "canva.svg",
+      "note": "Requested .svg but only a valid raster logo was available; saved as PNG."
+    },
+    {
+      "filename": "adobe.svg",
+      "brand": "Adobe",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Adobe_logo_and_wordmark_%282017%29.svg",
+      "source_type": "wikimedia",
+      "license": "Public domain, Adobe",
+      "source_file_title": "Adobe logo and wordmark (2017).svg",
+      "width": 512,
+      "height": 129,
+      "bytes": 3212
+    },
+    {
+      "filename": "heroku.svg",
+      "brand": "Heroku",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Heroku_logo.svg",
+      "source_type": "wikimedia",
+      "license": "Public domain, ™/®Salesforce.com",
+      "bytes": 1985,
+      "source_file_title": "Heroku logo.svg",
+      "width": 512,
+      "height": 143
+    },
+    {
+      "filename": "amazonwebservices.png",
+      "brand": "Amazon Web Services",
+      "source_url": "https://a0.awsstatic.com/main/images/site/touch-icon-ipad-144-precomposed.png",
+      "source_type": "official-site",
+      "license": "Trademark of the brand owner; retrieved from the brand's own site for identification only",
+      "bytes": 3944,
+      "requested_filename": "amazonwebservices.svg",
+      "note": "Requested .svg but only a valid raster logo was available; saved as PNG."
+    },
+    {
+      "filename": "bhdstar.png",
+      "brand": "BHD Star Cineplex",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Logo_BHD_Star_Cineplex.png",
+      "source_type": "wikimedia",
+      "license": "Public domain, BHD",
+      "bytes": 154644,
+      "requested_filename": "bhdstar.svg",
+      "source_file_title": "Logo BHD Star Cineplex.png",
+      "width": 2027,
+      "height": 2026
+    },
+    {
+      "filename": "beta-cinemas.png",
+      "brand": "Beta Cinemas",
+      "source_url": "https://www.betacinemas.vn/Assets/Common/logo/logo.png",
+      "source_type": "official-site",
+      "license": "Trademark of the brand owner; retrieved from the brand's own site for identification only",
+      "bytes": 1664,
+      "requested_filename": "beta-cinemas.svg",
+      "note": "Requested .svg but only a valid raster logo was available; saved as PNG."
+    },
+    {
+      "filename": "katinat.png",
+      "brand": "Katinat Coffee",
+      "source_url": "https://katinat.vn/wp-content/uploads/2024/01/cropped-Kat-Logo-fa-rgb-05-192x192.png",
+      "source_type": "official-site",
+      "license": "Trademark of the brand owner; retrieved from the brand's own site for identification only",
+      "bytes": 4765,
+      "requested_filename": "katinat.svg",
+      "note": "Requested .svg but only a valid raster logo was available; saved as PNG."
+    },
+    {
+      "filename": "momo.png",
+      "requested_filename": "momo.svg",
+      "brand": "MoMo",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/MoMo_Logo_App.svg",
+      "source_type": "wikimedia",
+      "license": "Public domain, MoMo",
+      "source_file_title": "MoMo Logo App.svg",
+      "note": "Wikimedia file embeds a PNG inside an SVG wrapper with no vector paths; the embedded PNG was extracted and saved as PNG.",
+      "width": 570,
+      "height": 570,
+      "bytes": 9676
+    },
+    {
+      "filename": "cellphones.png",
+      "brand": "CellphoneS",
+      "source_url": "https://cdn2.cellphones.com.vn/x/media/favicon/default/logo-cps.png",
+      "source_type": "official-site",
+      "license": "Trademark of the brand owner; retrieved from the brand's own site for identification only",
+      "bytes": 4639,
+      "requested_filename": "cellphones.svg",
+      "note": "Requested .svg but only a valid raster logo was available; saved as PNG."
+    },
+    {
+      "filename": "vinaphone.svg",
+      "brand": "VinaPhone",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_Vinaphone.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "source_type": "wikimedia",
+      "license": "Public domain, Vinaphone",
+      "bytes": 5990,
+      "source_file_title": "Logo Vinaphone.svg"
+    },
+    {
+      "filename": "vietinbank.png",
+      "brand": "VietinBank",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/Vietinbank.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "source_type": "wikimedia",
+      "license": "Public domain, Ngân hàng TMCP Công thương Việt Nam (Vietinbank)",
+      "bytes": 3655,
+      "requested_filename": "vietinbank.svg",
+      "note": "Requested .svg but only a valid raster logo was available; saved as PNG.",
+      "source_file_title": "Vietinbank.png"
+    }
+  ],
+  "missing": []
+}

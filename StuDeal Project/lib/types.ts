@@ -1,4 +1,4 @@
-export type Category = "cinema" | "food" | "software" | "learning";
+export type Category = "cinema" | "food" | "software" | "learning" | "shopping" | "transport";
 
 export type EligibilityKind =
   | "student_only"
@@ -7,6 +7,8 @@ export type EligibilityKind =
   | "referral"
   | "general"
   | "student_verified_education";
+
+export type ValueKind = "discount" | "free" | "price" | "credit" | "points" | "other";
 
 export interface PublicDeal {
   id: string;
@@ -29,6 +31,10 @@ export interface PublicDeal {
   cities: string[] | null;
   starts_at: string | null;
   expires_at: string | null;
+  brand_slug: string | null;
+  value_kind: ValueKind;
+  source_last_status: number | null;
+  source_last_checked_at: string | null;
 }
 
 export interface Recommendation {

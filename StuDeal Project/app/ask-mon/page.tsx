@@ -8,18 +8,13 @@ import { Mascot } from "@/components/mascot";
 import { OfferCard } from "@/components/offer-card";
 import { capture } from "@/lib/analytics";
 import { isSafeHttpUrl } from "@/lib/utils";
+import { ASK_MON_MODELS, isAllowedModel } from "@/lib/ask-mon-models";
 import type { AskMonMode, AskMonResponse, ChatMessage, PublicDeal, Recommendation } from "@/lib/types";
 
-const MODE_LABELS: Record<AskMonMode, string> = {
-  ai: "AI trực tiếp",
-  matching: "Đối chiếu danh mục",
-  fallback: "Dự phòng"
-};
-
-const MODE_STYLES: Record<AskMonMode, string> = {
-  ai: "bg-brand-purple/10 text-brand-purple",
-  matching: "bg-success-surface text-success",
-  fallback: "bg-warning-surface text-warning"
+const MODE_NOTES: Partial<Record<AskMonMode, string>> = {
+  ai: "Trả lời trực tiếp",
+  matching: "Danh mục",
+  fallback: "Tạm thời"
 };
 
 const SUGGESTIONS = [
@@ -95,14 +90,10 @@ function historyFrom(entries: ChatEntry[]): ChatMessage[] {
     .map((entry) => ({ role: entry.role, content: entry.content.slice(0, 2000) }));
 }
 
-function ModeBadge({ mode }: { mode: AskMonMode }) {
-  return (
-    <span
-      className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] ${MODE_STYLES[mode]}`}
-    >
-      {MODE_LABELS[mode]}
-    </span>
-  );
+function ModeNote({ mode }: { mode: AskMonMode }) {
+  const note = MODE_NOTES[mode];
+  if (!note) return null;
+  return <span className="text-xs font-medium text-muted">{note}</span>;
 }
 
 export default function AskMonPage() {
@@ -112,8 +103,24 @@ export default function AskMonPage() {
   const [pendingQuery, setPendingQuery] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [failedQuery, setFailedQuery] = useState<string | null>(null);
+  const [model, setModel] = useState<string>(ASK_MON_MODELS[0].id);
   const logRef = useRef<HTMLDivElement>(null);
   const nextId = useRef(0);
+
+  useEffect(() => {
+    let active = true;
+    void fetch("/api/ask-mon/models")
+      .then((response) => response.json())
+      .then((payload: { default_model?: string }) => {
+        if (active && isAllowedModel(payload.default_model)) {
+          setModel(payload.default_model);
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const node = logRef.current;
@@ -139,7 +146,7 @@ export default function AskMonPage() {
       const response = await fetch("/api/ask-mon", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: text, history: historyFrom(messages), limit: 3 })
+        body: JSON.stringify({ query: text, history: historyFrom(messages), limit: 3, model })
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const payload = parseResponse((await response.json()) as unknown);
@@ -160,8 +167,7 @@ export default function AskMonPage() {
         result_count: payload.recommendations.length,
         query_length: queryLength,
         latency_ms: Date.now() - startedAt
-      });
-    } catch {
+      });    } catch {
       setError("Không gửi được câu hỏi. Kiểm tra kết nối rồi thử lại.");
       setFailedQuery(text);
       setPendingQuery(null);
@@ -196,28 +202,18 @@ export default function AskMonPage() {
 
   return (
     <div className="page-wrap grid gap-6 py-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-      <aside className="space-y-4">
+      <aside className="order-2 space-y-4 lg:order-1">
         <div className="card-surface p-5">
-          <Mascot pose="thinking" className="mx-auto h-auto w-40" />
+          <Mascot pose="thinking" className="mx-auto h-auto w-40" priority />
           <h1 className="mt-3 font-display text-3xl font-bold text-ink">Hỏi Mon</h1>
           <p className="mt-2 text-sm text-muted">
             Mon tìm ưu đãi trong danh mục hiện hành, giải thích điều kiện ngắn gọn và chỉ gợi ý các
             ưu đãi có thật.
           </p>
-          <dl className="mt-4 space-y-2 text-sm">
-            <div>
-              <dt className="font-semibold text-ink">AI trực tiếp</dt>
-              <dd className="text-muted">Mon gọi mô hình để trả lời.</dd>
-            </div>
-            <div>
-              <dt className="font-semibold text-ink">Đối chiếu danh mục</dt>
-              <dd className="text-muted">Mon tìm trực tiếp trong danh mục, chưa gọi mô hình.</dd>
-            </div>
-            <div>
-              <dt className="font-semibold text-ink">Dự phòng</dt>
-              <dd className="text-muted">Kết nối mô hình lỗi, Mon dùng danh mục để trả lời.</dd>
-            </div>
-          </dl>
+          <p className="mt-4 text-sm text-muted">
+            Mon trả lời trực tiếp khi kết nối hoạt động. Nếu mô hình tạm thời không phản hồi, Mon vẫn
+            tìm trong danh mục hiện hành để bạn không bị kẹt.
+          </p>
           <p className="mt-4 rounded-xl bg-surface-lilac p-3 text-xs text-ink">
             Tin nhắn và vài lượt gần nhất có thể được gửi tới nhà cung cấp mô hình khi ở chế độ AI
             trực tiếp. Đừng nhập thông tin nhạy cảm.{" "}
@@ -231,6 +227,30 @@ export default function AskMonPage() {
           >
             Xem toàn bộ danh mục
           </Link>
+          <div className="mt-5 border-t border-border pt-4">
+            <label
+              htmlFor="ask-mon-model"
+              className="block text-xs font-bold uppercase tracking-[0.14em] text-muted"
+            >
+              Mô hình AI
+            </label>
+            <select
+              id="ask-mon-model"
+              value={model}
+              onChange={(event) => setModel(event.target.value)}
+              className="mt-2 w-full min-h-11 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-ink"
+            >
+              {ASK_MON_MODELS.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label} {option.free ? "(miễn phí)" : ""}
+                </option>
+              ))}
+            </select>
+            <p className="mt-2 text-xs text-muted">
+              {ASK_MON_MODELS.find((option) => option.id === model)?.note ??
+                "Mô hình dùng cho câu hỏi tiếp theo."}
+            </p>
+          </div>
         </div>
         <button
           type="button"
@@ -242,7 +262,7 @@ export default function AskMonPage() {
         </button>
       </aside>
 
-      <section aria-label="Cuộc trò chuyện với Mon" className="card-surface overflow-hidden">
+      <section aria-label="Cuộc trò chuyện với Mon" className="card-surface order-1 overflow-hidden lg:order-2">
         <div className="border-b border-border px-4 py-3 sm:px-5">
           <p className="text-sm font-bold text-ink">Mon</p>
           <p className="text-xs text-muted">Trợ lý tìm ưu đãi cho sinh viên</p>
@@ -290,7 +310,7 @@ export default function AskMonPage() {
                     M
                   </span>
                   <span className="text-sm font-semibold text-ink">Mon</span>
-                  {entry.mode ? <ModeBadge mode={entry.mode} /> : null}
+                  {entry.mode ? <ModeNote mode={entry.mode} /> : null}
                 </div>
                 <div className="max-w-[92%] rounded-2xl rounded-tl-md border border-border bg-white px-4 py-3">
                   <div className="prose-mon max-w-none break-words text-sm leading-6 text-ink">

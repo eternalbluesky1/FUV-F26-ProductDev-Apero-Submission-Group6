@@ -5,7 +5,7 @@ import Link from "next/link";
 import { EmptyState } from "@/components/empty-state";
 import { Mascot } from "@/components/mascot";
 import { OfferCard } from "@/components/offer-card";
-import { getPublicDeals } from "@/lib/catalog";
+import { useCatalog } from "@/lib/use-catalog";
 import { loadGuestState, saveGuestState } from "@/lib/storage";
 import type { GuestState, PublicDeal } from "@/lib/types";
 
@@ -20,7 +20,7 @@ export default function PocketPage() {
   const [hydrated, setHydrated] = useState(false);
   const [announcement, setAnnouncement] = useState("");
 
-  const catalog = useMemo(() => getPublicDeals(), []);
+  const catalog = useCatalog();
   const dealById = useMemo(() => new Map(catalog.map((deal) => [deal.id, deal])), [catalog]);
 
   useEffect(() => {
