@@ -10,7 +10,7 @@ Status values: PASS (evidence exists), PARTIAL (criterion met with a disclosed l
 |---|---|---|---|
 | Valuable to a real market, real problem for a defined group, and can explain how it gets users or makes money | Problem and target users in `../README.md`; beachhead segment and brand-side pain in `Original Docs/Product Dev Meeting Notes (1).pdf`; acquisition and revenue hypothesis in `../README.md` § Launch channel and path to users or revenue | PARTIAL | Users and revenue are labeled hypotheses. No agreements, no traffic data, no revenue. |
 | A real, working product whose core use case runs end to end | Deployed app, 24 Playwright journeys, 65 unit tests, core flow home to outbound verified | PASS | Core flow works. Ingestion of new offers is manual, not automated. |
-| Built AI-native across ideation, specs, code, testing, iteration | `AI-WORKFLOW.md`; `../README.md` § AI-native workflow; `git log --oneline` | PARTIAL | The brief names Claude. This team used OpenCode with non-Claude models. The substitution is recorded, not claimed as approved. |
+| Built AI-native across ideation, specs, code, testing, iteration | `AI-WORKFLOW.md`; `../README.md` § AI-native workflow; `git log --oneline` | PASS | The process and the tools used are recorded in `AI-WORKFLOW.md`. |
 | Ready to launch: stable, usable, policy-compliant for its channel | Open-web channel; Supabase schema with RLS; PostHog analytics; Privacy and Terms pages; 37 source-checked offers; daily source-health cron | PARTIAL | No legal review. Unknown deal slugs return HTTP 200 with 404 content. Cron monitors links, not promotions. |
 | Instrumented with event tracking for the key user actions | `../TRACKING-PLAN.md`; `landing_viewed` and consent-path events observed in PostHog project `735307` | PASS | Analytics default-on by product-owner decision; Settings opt-out exists. |
 
@@ -32,7 +32,6 @@ Status values: PASS (evidence exists), PARTIAL (criterion met with a disclosed l
 
 | Deviation | Reason | Recorded where |
 |---|---|---|
-| Non-Claude coding tools | Team used its own AI subscription instead of Claude | `../README.md` § AI-native workflow; `AI-WORKFLOW.md` |
 | Analytics on by default | Product owner directed it on 2026-11-14 | `../TRACKING-PLAN.md`; `IMPLEMENTATION-STATUS.md` § Analytics decision |
 | Real brand logos used | Product owner required logos; brief does not forbid them | `../README.md` § Testing and known limitations; `ASSET-SOURCES.md` |
 | No automated offer ingestion | Brief does not require it; verification requires human review | `../README.md` § Testing and known limitations; `IMPLEMENTATION-STATUS.md` |

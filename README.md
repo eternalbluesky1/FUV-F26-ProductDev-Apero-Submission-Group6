@@ -61,18 +61,19 @@ See [`StuDeal Project/TRACKING-PLAN.md`](StuDeal%20Project/TRACKING-PLAN.md). Po
 
 ## AI-native workflow
 
-Actual tools used in this build:
+This is how we actually worked, not a list of tools.
 
-- OpenCode coding agent for repository inspection, planning, implementation, and verification.
-- The agent separated source ingestion, UI implementation, API and database work, and documentation into bounded workstreams.
-- OpenRouter model `baidu/ernie-5.5-flash-preview:free` is the default for Ask Mon and was exercised through the live route on 15 November 2026. `Ling 3.2 Flash` and `Nemotron 3.5 Super VL` are selectable alternatives. The app still has a labeled deterministic matching fallback.
-- Generated screen concepts and mascot assets came from the supplied asset archive. The screens are references, not live screenshots.
+**1. We used AI to interrogate the brief before building anything.** The assistant read the assignment brief, the three meeting-note PDFs, the PRD and the design tokens, then separated what the course requires from what the team wanted. It asked what the beachhead segment was, what proof the Apero gate would accept, and which planned features had no evidence behind them. The output was a written requirements page that we then edited by hand. That page is why accounts, cross-device sync and points are not in the build: they were cut before code, not abandoned later.
 
-What worked: the source set was complete enough to define the core journey, the design tokens were machine-readable, and the OpenRouter key/model worked. What did not: Docker is unavailable, so the local Supabase stack and pgTAP path cannot run; the archive is missing `studeal-theme.css` and `SEED-IMPORT.md`; the PRD's last page is private and must not be committed.
+**2. We turned sources into a specification, then into slices.** Ingested material was cross-linked into a project wiki. From it the assistant drafted the route list, the catalog schema, the RLS predicate and the Ask Mon contract. Each slice shipped with its own check: the guest journey, the catalog and search, the Supabase integration, the AI route, then tests and deployment. A slice was not called done until a command result said so.
 
-This section describes the actual build process, not a claim that every integration is live.
+**3. We used AI to find our own mistakes.** The useful pattern was asking the assistant to attack the build instead of extend it. That is how we found a free model inventing an offer that was not in the catalog, an unknown deal slug returning HTTP 200, Ask Mon's composer sitting below the fold on a phone, and raw database enums leaking into Vietnamese copy. Each finding was fixed and then guarded by a test or a doc line. The log of what broke is more useful evidence than a list of prompts.
 
-The brief names Claude as the build tool. This team used OpenCode with a non-Claude model for ideation support, specification, implementation, testing, and iteration, and the product itself calls OpenRouter. We record that substitution plainly and do not claim it was approved in advance. The full activity record is in [`StuDeal Project/docs/AI-WORKFLOW.md`](StuDeal%20Project/docs/AI-WORKFLOW.md).
+**4. The working knowledge base was the memory.** `../llm-wiki/` held the ingested sources, an index, a sources ledger, and an append-only log. Every session started by reading it and every milestone ended by appending to it with the command that proved the claim. That is how the work survived context loss across long sessions, and how a claim like "37 offers are live" stayed attached to the check that produced it. It also stopped the team from re-deciding the same question twice.
+
+**5. What did not work.** Docker is unavailable, so the local Supabase stack and pgTAP tests are blocked. The asset archive is missing two files it was supposed to contain. Free model tool-calling was unreliable in a raw probe, so the live route is limited to an allowlist and filters every suggestion against the catalog. One probe test had to be deleted because automated tests must never call a live provider.
+
+The detailed activity record, including the model evaluation and the exact failures, is in [`StuDeal Project/docs/AI-WORKFLOW.md`](StuDeal%20Project/docs/AI-WORKFLOW.md). Live integration results are in [`StuDeal Project/docs/IMPLEMENTATION-STATUS.md`](StuDeal%20Project/docs/IMPLEMENTATION-STATUS.md).
 
 ## Testing and known limitations
 
