@@ -36,6 +36,7 @@ Deployment: https://fuv-f26-productdev-apero-submission.vercel.app
 | Visual audit fixes | PASS | humanized source/status labels; Ask Mon chat first on mobile |
 | Fixture data notice | PASS | `components/fixture-notice.tsx` shows a Vietnamese demo-data label in fixture mode and after a hosted-read fallback |
 | Public rubric tracker | PASS | `docs/RUBRIC-TRACKER.md` maps the assignment brief criteria to evidence |
+| AI workflow phases | PASS | `../README.md` § AI-native workflow and `docs/AI-WORKFLOW.md` § 1 and 2.0 record the meeting, GPT-6 Luna drafting, GPT-6.1 Terra proofing, then development |
 | README and tracking plan | PASS | `../README.md`, `TRACKING-PLAN.md` |
 | Hosted deployment | PASS | Vercel production alias updated |
 | Demo video | NOT RUN | deferred by product owner |

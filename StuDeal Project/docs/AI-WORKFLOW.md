@@ -1,10 +1,18 @@
 # Quy trình xây dựng AI-native
 
-Tài liệu này ghi lại cách StuDeal thực sự được xây dựng, không phải một bài luận chung về AI. Mỗi mục nêu việc đã làm, lý do, và nơi có thể kiểm tra. Ngày ghi: 2026-11-14. Kết quả kiểm thử được chép trong `docs/IMPLEMENTATION-STATUS.md`; tài liệu này không chạy lại toàn bộ bộ kiểm thử.
+Tài liệu này ghi lại cách StuDeal thực sự được xây dựng, không phải một bài luận chung về AI. Mỗi mục nêu việc đã làm, lý do, và nơi có thể kiểm tra. Ngày ghi: 2026-11-15. Kết quả kiểm thử được chép trong `docs/IMPLEMENTATION-STATUS.md`; tài liệu này không chạy lại toàn bộ bộ kiểm thử.
 
 ## 1. Tóm tắt
 
-Phần lớn công việc build được ghi nhận trong ngày 14 tháng 11 năm 2026, do một coding agent (OpenCode) và người điều khiển phiên làm việc thực hiện, cùng các subagent chạy nền cho những phần giao diện độc lập, một agent nghiên cứu web, và một script đo khả năng gọi công cụ của các model. Sản phẩm là Next.js App Router, có catalog ưu đãi kèm nguồn và ngày kiểm tra, Supabase cho catalog và log lượt nhấp, PostHog cho sản phẩm, OpenRouter cho Ask Mon, và Vercel cho hosting.
+Công việc chia thành năm giai đoạn, theo đúng thứ tự đã xảy ra:
+
+1. **Họp nhóm.** Năm thành viên họp trước để chốt cấu trúc thô: vấn đề, nhóm sinh viên mục tiêu, vòng lặp lướt và lưu ưu đãi, các màn hình sẽ có, và những gì cắt bỏ. Không có nội dung nào được tạo trước cuộc họp này.
+2. **PRD và asset ban đầu, dùng GPT-6 Luna ở mức reasoning `max`.** Nhóm dùng ChatGPT với GPT-6 Luna để soạn PRD từ kết quả cuộc họp: phát biểu vấn đề, nhóm người dùng beachhead, danh sách tính năng, copy cho thẻ ưu đãi, các trạng thái rỗng và lỗi, và mô tả cho các hình tham chiếu đầu tiên. Đây là model soạn thảo khối lượng lớn, phù hợp với một tài liệu dài nhiều mục nhỏ. Sau đó nhóm sửa tay, cắt những tính năng không có bằng chứng, và đối chiếu hình tham chiếu với asset archive được cung cấp.
+3. **Proofing, dùng GPT-6.1 Terra ở mức reasoning `max`.** Lượt thứ hai dùng GPT-6.1 Terra, chọn vì khả năng đọc tài liệu và hình ảnh, để đối chiếu PRD với đề bài và ba PDF ghi chú. Nó chỉ ra tuyên bố thiếu căn cứ, mâu thuẫn giữa các mục, trạng thái còn thiếu, và chỗ spec hứa hành vi mà nhóm chưa quyết định làm. Kết quả là danh sách sửa lỗi, không phải phạm vi mới. Nhóm áp dụng rồi đóng băng spec.
+4. **Phát triển.** Chỉ sau khi spec đóng băng mới bắt đầu code, theo từng slice dọc: hành trình khách, catalog và tìm kiếm, tích hợp Supabase, route Ask Mon, rồi test và deploy. Mỗi slice kết thúc bằng kết quả lệnh, không phải bằng lời khẳng định.
+5. **Knowledge base vận hành.** `../llm-wiki/` giữ nguồn đã ingest, index, sổ nguồn và log chỉ ghi thêm. Mỗi phiên bắt đầu bằng việc đọc nó và mỗi mốc kết thúc bằng việc ghi vào đó kèm lệnh đã chứng minh tuyên bố.
+
+Phần lớn công việc build được ghi nhận trong ngày 14 và 15 tháng 11 năm 2026, do một coding agent (OpenCode) và người điều khiển phiên làm việc thực hiện, cùng các subagent chạy nền cho những phần giao diện độc lập, một agent nghiên cứu web, và một script đo khả năng gọi công cụ của các model. Sản phẩm là Next.js App Router, có catalog ưu đãi kèm nguồn và ngày kiểm tra, Supabase cho catalog và log lượt nhấp, PostHog cho sản phẩm, OpenRouter cho Ask Mon, và Vercel cho hosting.
 
 Điểm đáng nói: phần lớn quyết định dưới đây xuất phát từ một lỗi hoặc một ràng buộc đã quan sát được, không phải từ sở thích thiết kế.
 
@@ -12,11 +20,26 @@ Phần lớn công việc build được ghi nhận trong ngày 14 tháng 11 nă
 
 | Công cụ hoặc cơ chế | Dùng cho | Bằng chứng trong repo |
 |---|---|---|
+| Họp nhóm | Chốt cấu trúc thô trước khi tạo bất kỳ nội dung nào | Phần 1, bước 1; `../llm-wiki/log.md` |
+| GPT-6 Luna (`max`) trong ChatGPT | Soạn PRD, copy thẻ ưu đãi, trạng thái rỗng và lỗi, mô tả hình tham chiếu | Phần 1, bước 2; PRD và `assets/` |
+| GPT-6.1 Terra (`max`) trong ChatGPT | Proofing PRD: tuyên bố thiếu căn cứ, mâu thuẫn, trạng thái thiếu | Phần 1, bước 3 |
 | OpenCode coding agent | Đọc repo, lập kế hoạch, viết và sửa code, refactor, chạy kiểm tra | `package.json`, `docs/IMPLEMENTATION-STATUS.md`, `git log --oneline` |
 | Subagent chạy nền | Sáu workstream giao diện độc lập | Kết quả nằm trong `app/`, `components/`, `public/brand/`; repo không lưu transcript đầy đủ của từng phiên |
 | Agent nghiên cứu web (Exa) | Tìm trang ưu đãi chính thức đang hiện hành | `assets/verified-offer-snapshot.csv`, danh sách nguồn ở PRD trang 41, `docs/ASSET-SOURCES.md` |
 | Script đo model | Đo tool-calling, độ trễ và chất lượng gợi ý của các model OpenRouter | Script đã chạy một lần rồi xoá khỏi repo để CI không gọi provider thật; allowlist ở `lib/ask-mon-models.ts` |
 | Vitest, Playwright, axe | Kiểm thử đơn vị, hành trình, accessibility, visual regression | `vitest.config.ts`, `playwright.config.ts`, `tests/` |
+
+### 2.0 Giai đoạn PRD và proofing
+
+**Cuộc họp.** Nhóm chốt cấu trúc thô trước: vấn đề, nhóm sinh viên mục tiêu, vòng lặp lướt rồi lưu, danh sách màn hình, và ranh giới cắt bỏ. Quyết định ở bước này là của nhóm, không phải của model.
+
+**GPT-6 Luna ở mức `max`.** Dùng để soạn PRD và nội dung đi kèm: phát biểu vấn đề, chân dung người dùng, danh sách tính năng MVP, luồng người dùng, phần monetization, copy tiếng Việt cho thẻ ưu đãi, các trạng thái rỗng và lỗi, và mô tả cho hình tham chiếu đầu tiên. Luna là model soạn thảo khối lượng lớn, phù hợp với một tài liệu dài gồm nhiều mục nhỏ; nhóm chọn nó vì tốc độ và chi phí, không phải vì nó giỏi nhất.
+
+Sau lượt này, nhóm sửa tay: cắt những tính năng không có bằng chứng, bỏ hứa hẹn về "tiết kiệm tiền" khi chưa có số liệu, và đối chiếu hình tham chiếu với asset archive được cung cấp. Asset archive vẫn là nguồn của mascot và design token dùng trong bản build.
+
+**GPT-6.1 Terra ở mức `max`.** Lượt proofing chạy PRD ngược lại với đề bài Apero và ba PDF ghi chú. Terra được chọn vì khả năng đọc tài liệu dài kèm hình ảnh và vì nó xử lý được việc đối chiếu chéo. Nó chỉ ra bốn loại lỗi: tuyên bố thiếu căn cứ, mâu thuẫn giữa các mục, trạng thái còn thiếu, và chỗ spec hứa hành vi mà nhóm chưa quyết định làm.
+
+Kết quả là một danh sách sửa lỗi, không phải phạm vi mới. Nhóm áp dụng, rồi đóng băng spec trước khi viết code. Đây là lý do các tính năng như tài khoản, đồng bộ đa thiết bị và điểm thưởng không có trong bản build: chúng bị cắt ở bước proofing, có ghi lại trong `../llm-wiki/wiki/requirements.md`, chứ không phải bị bỏ dở giữa chừng.
 
 ### 2.1 OpenCode coding agent
 
